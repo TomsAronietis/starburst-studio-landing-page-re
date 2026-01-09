@@ -88,11 +88,6 @@ export default function Offer() {
                     <Play className="w-8 h-8 text-gray-900 fill-current" />
                   </div>
                 </div>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <span className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-md text-sm font-semibold text-black inline-block">
-                    Example Edit {index + 1}
-                  </span>
-                </div>
               </div>
             ))
           ) : (
@@ -107,11 +102,6 @@ export default function Offer() {
                 <div className="bg-white/90 rounded-full p-4 group-hover:scale-110 transition-transform duration-300">
                   <Play className="w-8 h-8 text-gray-900 fill-current" />
                 </div>
-              </div>
-              <div className="absolute bottom-4 left-4 right-4">
-                <span className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-md text-sm font-semibold text-black inline-block">
-                  Example Final Edit
-                </span>
               </div>
             </div>
           )}

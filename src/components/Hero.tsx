@@ -35,7 +35,7 @@ export default function Hero() {
             </svg>
           </div>
 
-          <p className="text-xs md:text-2xl text-black leading-relaxed mb-6 max-w-3xl font-light">
+          <p className="text-base md:text-2xl text-black leading-relaxed mb-6 max-w-3xl font-light">
             We'll turn your raw real estate clips into clean, premium videos that attract clients, keep you smiling and wanting to post again.
           </p>
 

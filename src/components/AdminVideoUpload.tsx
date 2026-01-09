@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Upload, Trash2, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, Trash2, CheckCircle, AlertCircle, Loader2, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface Video {
@@ -19,26 +19,59 @@ export default function AdminVideoUpload() {
     loadVideos();
   }, []);
 
+  const getErrorMessage = (error: any, action: string): string => {
+    console.error(`Error ${action}:`, error);
+
+    const errorMessage = error?.message || String(error);
+
+    if (errorMessage.includes('row-level security') || errorMessage.includes('policy')) {
+      return `Permission denied. The storage bucket permissions need to be updated. Please check your Supabase dashboard > Storage > videos bucket > Policies.`;
+    }
+
+    if (errorMessage.includes('Bucket not found') || errorMessage.includes('bucket')) {
+      return `Storage bucket 'videos' not found. Please create it in your Supabase dashboard > Storage > Create a new bucket named 'videos'.`;
+    }
+
+    if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+      return `Network error. Check your internet connection and make sure your Supabase URL is correct.`;
+    }
+
+    if (errorMessage.includes('JWT') || errorMessage.includes('apikey')) {
+      return `Authentication error. Check that your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set correctly in your .env file.`;
+    }
+
+    if (errorMessage.includes('size') || errorMessage.includes('too large')) {
+      return `File too large. Try uploading a smaller video file (max 50MB recommended).`;
+    }
+
+    if (errorMessage.includes('duplicate') || errorMessage.includes('already exists')) {
+      return `A file with this name already exists. The file will be renamed automatically on retry.`;
+    }
+
+    return `${action} failed: ${errorMessage}. Please try again or check the browser console for details.`;
+  };
+
   const loadVideos = async () => {
     try {
       const { data, error } = await supabase.storage.from('videos').list();
 
       if (error) throw error;
 
-      const videosWithUrls = data.map((file) => {
-        const { data: urlData } = supabase.storage.from('videos').getPublicUrl(file.name);
-        return {
-          name: file.name,
-          url: urlData.publicUrl,
-          size: file.metadata?.size || 0,
-          created_at: file.created_at,
-        };
-      });
+      const videosWithUrls = data
+        .filter(file => file.name !== '.emptyFolderPlaceholder')
+        .map((file) => {
+          const { data: urlData } = supabase.storage.from('videos').getPublicUrl(file.name);
+          return {
+            name: file.name,
+            url: urlData.publicUrl,
+            size: file.metadata?.size || 0,
+            created_at: file.created_at,
+          };
+        });
 
       setVideos(videosWithUrls);
     } catch (error) {
-      console.error('Error loading videos:', error);
-      setMessage({ type: 'error', text: 'Failed to load videos' });
+      setMessage({ type: 'error', text: getErrorMessage(error, 'Loading videos') });
     } finally {
       setLoading(false);
     }
@@ -52,6 +85,8 @@ export default function AdminVideoUpload() {
     setMessage(null);
 
     try {
+      let uploadedCount = 0;
+
       for (const file of Array.from(files)) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
@@ -61,14 +96,20 @@ export default function AdminVideoUpload() {
           upsert: false,
         });
 
-        if (error) throw error;
+        if (error) {
+          throw new Error(`Failed to upload ${file.name}: ${error.message}`);
+        }
+
+        uploadedCount++;
       }
 
-      setMessage({ type: 'success', text: `Successfully uploaded ${files.length} video(s)` });
+      setMessage({
+        type: 'success',
+        text: `Successfully uploaded ${uploadedCount} video(s)! They will appear on your landing page.`
+      });
       await loadVideos();
     } catch (error) {
-      console.error('Error uploading:', error);
-      setMessage({ type: 'error', text: 'Failed to upload video(s)' });
+      setMessage({ type: 'error', text: getErrorMessage(error, 'Uploading video') });
     } finally {
       setUploading(false);
       event.target.value = '';
@@ -83,11 +124,10 @@ export default function AdminVideoUpload() {
 
       if (error) throw error;
 
-      setMessage({ type: 'success', text: 'Video deleted successfully' });
+      setMessage({ type: 'success', text: 'Video deleted successfully. It will no longer appear on your landing page.' });
       await loadVideos();
     } catch (error) {
-      console.error('Error deleting:', error);
-      setMessage({ type: 'error', text: 'Failed to delete video' });
+      setMessage({ type: 'error', text: getErrorMessage(error, 'Deleting video') });
     }
   };
 
@@ -107,15 +147,26 @@ export default function AdminVideoUpload() {
           <p className="text-gray-600 mb-8">Upload and manage videos for your landing page</p>
 
           {message && (
-            <div className={`mb-6 p-4 rounded-lg flex items-center gap-3 ${
-              message.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
+            <div className={`mb-6 p-4 rounded-lg flex items-start gap-3 ${
+              message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
             }`}>
               {message.type === 'success' ? (
-                <CheckCircle className="w-5 h-5" />
+                <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
               ) : (
-                <AlertCircle className="w-5 h-5" />
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
               )}
-              <span>{message.text}</span>
+              <div className="flex-1">
+                <p className={`font-semibold mb-1 ${message.type === 'success' ? 'text-green-900' : 'text-red-900'}`}>
+                  {message.type === 'success' ? 'Success!' : 'Error'}
+                </p>
+                <p className="text-sm leading-relaxed">{message.text}</p>
+              </div>
+              <button
+                onClick={() => setMessage(null)}
+                className="flex-shrink-0 hover:opacity-70 transition-opacity"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           )}
 

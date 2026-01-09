@@ -14,7 +14,7 @@ export default function Mechanism() {
   };
 
   return (
-    <section className="bg-[#FAF8F5] py-16 md:py-24">
+    <section className="bg-gray-50 py-16 md:py-24">
       <div className="max-w-[1100px] mx-auto px-6 md:px-8">
         <h2 className="font-serif text-3xl md:text-5xl text-black leading-tight mb-12 text-center">
           Video edits <span className="text-[#B89B4F]">that feel premium</span> and keep you top of mind
@@ -38,7 +38,7 @@ export default function Mechanism() {
                   opacity="0.7"
                 />
               </svg>
-              <div className="relative bg-[#FAF8F5] p-6 h-full flex flex-col justify-center">
+              <div className="relative bg-white p-6 h-full flex flex-col justify-center">
                 <div className="flex gap-4 items-start">
                   <div className="w-8 h-8 rounded-full bg-[#B89B4F] text-white flex items-center justify-center font-bold flex-shrink-0">
                     {index + 1}

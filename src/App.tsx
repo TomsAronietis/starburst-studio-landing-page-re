@@ -10,7 +10,7 @@ import FinalCTA from './components/FinalCTA';
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#FAF8F5]">
+    <div className="min-h-screen bg-white">
       <Hero />
       <ProofStrip />
       <ProofGallery />

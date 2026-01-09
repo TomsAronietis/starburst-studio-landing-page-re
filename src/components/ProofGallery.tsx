@@ -27,29 +27,34 @@ export default function ProofGallery() {
 
       if (error) throw error;
 
+      const placeholders = [
+        {
+          id: 'p1',
+          position: 1,
+          video_name: 'placeholder-1',
+          video_url: 'https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800',
+        },
+        {
+          id: 'p2',
+          position: 2,
+          video_name: 'placeholder-2',
+          video_url: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800',
+        },
+        {
+          id: 'p3',
+          position: 3,
+          video_name: 'placeholder-3',
+          video_url: 'https://images.pexels.com/photos/1475938/pexels-photo-1475938.jpeg?auto=compress&cs=tinysrgb&w=800',
+        },
+      ];
+
       if (data && data.length > 0) {
-        setVideos(data);
+        const merged = placeholders.map(p =>
+          data.find(d => d.position === p.position) || p
+        );
+        setVideos(merged);
       } else {
-        setVideos([
-          {
-            id: '1',
-            position: 1,
-            video_name: 'placeholder-1',
-            video_url: 'https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800',
-          },
-          {
-            id: '2',
-            position: 2,
-            video_name: 'placeholder-2',
-            video_url: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800',
-          },
-          {
-            id: '3',
-            position: 3,
-            video_name: 'placeholder-3',
-            video_url: 'https://images.pexels.com/photos/1475938/pexels-photo-1475938.jpeg?auto=compress&cs=tinysrgb&w=800',
-          },
-        ]);
+        setVideos(placeholders);
       }
     } catch (error) {
       console.error('Error loading featured videos:', error);

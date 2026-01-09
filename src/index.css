@@ -1,4 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Kenao:wght@400&family=Manrope:wght@400;500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap');
+
+@font-face {
+  font-family: 'Kenao';
+  src: url('/fonts/kenao.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
@@ -11,11 +19,11 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Kenao', serif;
+    font-family: 'Kenao', sans-serif;
   }
 
   .font-serif {
-    font-family: 'Kenao', serif;
+    font-family: 'Kenao', sans-serif;
   }
 
   .font-sans {

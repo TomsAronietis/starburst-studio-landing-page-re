@@ -20,7 +20,7 @@ export default function ProofGallery() {
   ];
 
   return (
-    <section id="proof-gallery" className="bg-white py-16 md:py-24">
+    <section id="proof-gallery" className="bg-[#FAF8F5] py-16 md:py-24">
       <div className="max-w-[1100px] mx-auto px-6 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {videos.map((video, index) => (

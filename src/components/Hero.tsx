@@ -10,7 +10,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative bg-white py-16 md:py-24 lg:py-32">
+    <section className="relative bg-[#FAF8F5] py-16 md:py-24 lg:py-32">
       <div className="max-w-[1100px] mx-auto px-6 md:px-8">
         <div className="flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-2 mb-6">

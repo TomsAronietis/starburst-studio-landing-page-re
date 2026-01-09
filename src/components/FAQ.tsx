@@ -40,7 +40,7 @@ export default function FAQ() {
   ];
 
   return (
-    <section className="bg-white py-16 md:py-24">
+    <section className="bg-[#FAF8F5] py-16 md:py-24">
       <div className="max-w-[1100px] mx-auto px-6 md:px-8 flex flex-col items-center">
         <h2 className="font-serif text-3xl md:text-5xl text-black leading-tight mb-12 text-center">
           Frequently asked questions

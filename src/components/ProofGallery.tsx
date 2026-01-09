@@ -37,6 +37,25 @@ export default function ProofGallery() {
 
   useEffect(() => {
     loadFeaturedVideos();
+
+    const subscription = supabase
+      .channel('featured_videos_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'featured_videos',
+        },
+        () => {
+          loadFeaturedVideos();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const loadFeaturedVideos = async () => {

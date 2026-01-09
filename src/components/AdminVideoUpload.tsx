@@ -14,63 +14,54 @@ interface FeaturedVideo {
   position: number;
   video_name: string;
   video_url: string;
-  label: string;
+}
+
+interface SampleEditVideo {
+  id: string;
+  position: number;
+  video_name: string;
+  video_url: string;
 }
 
 export default function AdminVideoUpload() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [featuredVideos, setFeaturedVideos] = useState<FeaturedVideo[]>([]);
-  const [selectedVideos, setSelectedVideos] = useState<{ [key: number]: string }>({});
-  const [labels, setLabels] = useState<{ [key: number]: string }>({
-    1: 'Raw → Final',
-    2: 'Before / After',
-    3: 'Raw → Final',
-  });
+  const [sampleEditVideos, setSampleEditVideos] = useState<SampleEditVideo[]>([]);
+  const [selectedGalleryVideos, setSelectedGalleryVideos] = useState<{ [key: number]: string }>({});
+  const [selectedSampleVideos, setSelectedSampleVideos] = useState<{ [key: number]: string }>({});
 
   useEffect(() => {
     loadVideos();
     loadFeaturedVideos();
+    loadSampleEditVideos();
   }, []);
 
-  const getErrorMessage = (error: any, action: string): string => {
+  const getErrorMessage = (error: unknown, action: string): string => {
     console.error(`Error ${action}:`, error);
-
-    const errorMessage = error?.message || String(error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
 
     if (errorMessage.includes('row-level security') || errorMessage.includes('policy')) {
-      return `Permission denied. The storage bucket permissions need to be updated. Please check your Supabase dashboard > Storage > videos bucket > Policies.`;
+      return `Permission denied. Please check your Supabase storage policies.`;
     }
-
     if (errorMessage.includes('Bucket not found') || errorMessage.includes('bucket')) {
-      return `Storage bucket 'videos' not found. Please create it in your Supabase dashboard > Storage > Create a new bucket named 'videos'.`;
+      return `Storage bucket 'videos' not found. Please create it in Supabase.`;
     }
-
     if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
-      return `Network error. Check your internet connection and make sure your Supabase URL is correct.`;
+      return `Network error. Check your internet connection.`;
     }
-
-    if (errorMessage.includes('JWT') || errorMessage.includes('apikey')) {
-      return `Authentication error. Check that your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set correctly in your .env file.`;
-    }
-
-    if (errorMessage.includes('size') || errorMessage.includes('too large')) {
-      return `File too large. Try uploading a smaller video file (max 50MB recommended).`;
-    }
-
     if (errorMessage.includes('duplicate') || errorMessage.includes('already exists')) {
-      return `A file with this name already exists. The file will be renamed automatically on retry.`;
+      return `A file with this name already exists.`;
     }
-
-    return `${action} failed: ${errorMessage}. Please try again or check the browser console for details.`;
+    return `${action} failed: ${errorMessage}`;
   };
 
   const loadVideos = async () => {
     try {
       const { data, error } = await supabase.storage.from('videos').list();
-
       if (error) throw error;
 
       const videosWithUrls = data
@@ -115,13 +106,12 @@ export default function AdminVideoUpload() {
         if (error) {
           throw new Error(`Failed to upload ${file.name}: ${error.message}`);
         }
-
         uploadedCount++;
       }
 
       setMessage({
         type: 'success',
-        text: `Successfully uploaded ${uploadedCount} video(s)! They will appear on your landing page.`
+        text: `Successfully uploaded ${uploadedCount} video(s)!`
       });
       await loadVideos();
     } catch (error) {
@@ -137,10 +127,9 @@ export default function AdminVideoUpload() {
 
     try {
       const { error } = await supabase.storage.from('videos').remove([fileName]);
-
       if (error) throw error;
 
-      setMessage({ type: 'success', text: 'Video deleted successfully. It will no longer appear on your landing page.' });
+      setMessage({ type: 'success', text: 'Video deleted successfully.' });
       await loadVideos();
     } catch (error) {
       setMessage({ type: 'error', text: getErrorMessage(error, 'Deleting video') });
@@ -159,26 +148,41 @@ export default function AdminVideoUpload() {
       setFeaturedVideos(data || []);
 
       const selected: { [key: number]: string } = {};
-      const loadedLabels: { [key: number]: string } = { ...labels };
-
       data?.forEach((fv) => {
         selected[fv.position] = fv.video_name;
-        loadedLabels[fv.position] = fv.label;
       });
-
-      setSelectedVideos(selected);
-      setLabels(loadedLabels);
+      setSelectedGalleryVideos(selected);
     } catch (error) {
       console.error('Error loading featured videos:', error);
     }
   };
 
+  const loadSampleEditVideos = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('sample_edit_videos')
+        .select('*')
+        .order('position', { ascending: true });
+
+      if (error) throw error;
+
+      setSampleEditVideos(data || []);
+
+      const selected: { [key: number]: string } = {};
+      data?.forEach((sv) => {
+        selected[sv.position] = sv.video_name;
+      });
+      setSelectedSampleVideos(selected);
+    } catch (error) {
+      console.error('Error loading sample edit videos:', error);
+    }
+  };
+
   const handleSaveFeaturedVideos = async () => {
+    setSaving(true);
     try {
       for (let position = 1; position <= 3; position++) {
-        const videoName = selectedVideos[position];
-        const label = labels[position] || 'Raw → Final';
-
+        const videoName = selectedGalleryVideos[position];
         if (!videoName) continue;
 
         const video = videos.find((v) => v.name === videoName);
@@ -192,7 +196,7 @@ export default function AdminVideoUpload() {
             .update({
               video_name: videoName,
               video_url: video.url,
-              label: label,
+              label: 'Video',
               updated_at: new Date().toISOString(),
             })
             .eq('id', existingFeatured.id);
@@ -203,7 +207,7 @@ export default function AdminVideoUpload() {
             position,
             video_name: videoName,
             video_url: video.url,
-            label: label,
+            label: 'Video',
           });
 
           if (error) throw error;
@@ -212,11 +216,59 @@ export default function AdminVideoUpload() {
 
       setMessage({
         type: 'success',
-        text: 'Featured videos updated successfully! They are now live on your landing page.',
+        text: 'Gallery videos updated successfully!',
       });
       await loadFeaturedVideos();
     } catch (error) {
-      setMessage({ type: 'error', text: getErrorMessage(error, 'Saving featured videos') });
+      setMessage({ type: 'error', text: getErrorMessage(error, 'Saving gallery videos') });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSaveSampleEditVideos = async () => {
+    setSaving(true);
+    try {
+      for (let position = 1; position <= 2; position++) {
+        const videoName = selectedSampleVideos[position];
+        if (!videoName) continue;
+
+        const video = videos.find((v) => v.name === videoName);
+        if (!video) continue;
+
+        const existingSample = sampleEditVideos.find((sv) => sv.position === position);
+
+        if (existingSample) {
+          const { error } = await supabase
+            .from('sample_edit_videos')
+            .update({
+              video_name: videoName,
+              video_url: video.url,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', existingSample.id);
+
+          if (error) throw error;
+        } else {
+          const { error } = await supabase.from('sample_edit_videos').insert({
+            position,
+            video_name: videoName,
+            video_url: video.url,
+          });
+
+          if (error) throw error;
+        }
+      }
+
+      setMessage({
+        type: 'success',
+        text: 'Free Sample Edit videos updated successfully!',
+      });
+      await loadSampleEditVideos();
+    } catch (error) {
+      setMessage({ type: 'error', text: getErrorMessage(error, 'Saving sample edit videos') });
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -330,32 +382,26 @@ export default function AdminVideoUpload() {
           </div>
 
           {videos.length > 0 && (
-            <div className="mt-12 pt-8 border-t-2 border-gray-300">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Featured Gallery Videos
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Select which 3 videos to display in the main gallery on your landing page
-              </p>
+            <>
+              <div className="mt-12 pt-8 border-t-2 border-gray-300">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  Top Gallery Videos
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  Select 3 videos to display in the main gallery at the top of your landing page
+                </p>
 
-              <div className="space-y-6">
-                {[1, 2, 3].map((position) => (
-                  <div key={position} className="bg-gray-50 rounded-lg p-6">
-                    <h3 className="font-semibold text-gray-900 mb-4">
-                      Position {position}
-                    </h3>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Select Video
-                        </label>
+                <div className="space-y-4">
+                  {[1, 2, 3].map((position) => (
+                    <div key={position} className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center gap-4">
+                        <span className="font-semibold text-gray-900 w-24">Position {position}</span>
                         <select
-                          value={selectedVideos[position] || ''}
+                          value={selectedGalleryVideos[position] || ''}
                           onChange={(e) =>
-                            setSelectedVideos({ ...selectedVideos, [position]: e.target.value })
+                            setSelectedGalleryVideos({ ...selectedGalleryVideos, [position]: e.target.value })
                           }
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B4F] focus:border-[#B89B4F] outline-none"
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B4F] focus:border-[#B89B4F] outline-none"
                         >
                           <option value="">-- Select a video --</option>
                           {videos.map((video) => (
@@ -364,57 +410,90 @@ export default function AdminVideoUpload() {
                             </option>
                           ))}
                         </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Display Label
-                        </label>
-                        <input
-                          type="text"
-                          value={labels[position] || ''}
-                          onChange={(e) =>
-                            setLabels({ ...labels, [position]: e.target.value })
-                          }
-                          placeholder="e.g., Raw → Final"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B4F] focus:border-[#B89B4F] outline-none"
-                        />
+                        {selectedGalleryVideos[position] && (
+                          <div className="w-16 h-28 bg-gray-900 rounded overflow-hidden flex-shrink-0">
+                            <video
+                              src={videos.find((v) => v.name === selectedGalleryVideos[position])?.url}
+                              className="w-full h-full object-cover"
+                              muted
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
+                  ))}
+                </div>
 
-                    {selectedVideos[position] && (
-                      <div className="mt-4">
-                        <p className="text-sm text-gray-600 mb-2">Preview:</p>
-                        <div className="aspect-[9/16] max-w-[200px] bg-gray-900 rounded-lg overflow-hidden">
-                          <video
-                            src={videos.find((v) => v.name === selectedVideos[position])?.url}
-                            className="w-full h-full object-cover"
-                            controls
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                <button
+                  onClick={handleSaveFeaturedVideos}
+                  disabled={saving}
+                  className="mt-6 bg-[#B89B4F] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#A88B3F] transition-colors disabled:opacity-50 flex items-center gap-2"
+                >
+                  {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Save Gallery Videos
+                </button>
               </div>
 
-              <button
-                onClick={handleSaveFeaturedVideos}
-                className="mt-6 bg-[#B89B4F] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#A88B3F] transition-colors"
-              >
-                Save Featured Videos
-              </button>
-            </div>
+              <div className="mt-12 pt-8 border-t-2 border-gray-300">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  Free Sample Edit Videos
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  Select videos to display in the Free Sample Edit section (lower on the page)
+                </p>
+
+                <div className="space-y-4">
+                  {[1, 2].map((position) => (
+                    <div key={position} className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center gap-4">
+                        <span className="font-semibold text-gray-900 w-24">Video {position}</span>
+                        <select
+                          value={selectedSampleVideos[position] || ''}
+                          onChange={(e) =>
+                            setSelectedSampleVideos({ ...selectedSampleVideos, [position]: e.target.value })
+                          }
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B4F] focus:border-[#B89B4F] outline-none"
+                        >
+                          <option value="">-- Select a video --</option>
+                          {videos.map((video) => (
+                            <option key={video.name} value={video.name}>
+                              {video.name}
+                            </option>
+                          ))}
+                        </select>
+                        {selectedSampleVideos[position] && (
+                          <div className="w-16 h-28 bg-gray-900 rounded overflow-hidden flex-shrink-0">
+                            <video
+                              src={videos.find((v) => v.name === selectedSampleVideos[position])?.url}
+                              className="w-full h-full object-cover"
+                              muted
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={handleSaveSampleEditVideos}
+                  disabled={saving}
+                  className="mt-6 bg-[#B89B4F] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#A88B3F] transition-colors disabled:opacity-50 flex items-center gap-2"
+                >
+                  {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Save Sample Edit Videos
+                </button>
+              </div>
+            </>
           )}
 
           <div className="mt-8 pt-6 border-t border-gray-200">
-            <h3 className="font-semibold text-gray-900 mb-2">How to use uploaded videos:</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">How to use:</h3>
             <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
               <li>Upload your videos using the upload area above</li>
-              <li>Select 3 videos to feature in the gallery section</li>
-              <li>Customize the label for each video (e.g., "Raw → Final", "Before / After")</li>
-              <li>Click "Save Featured Videos" to update your landing page</li>
-              <li>Delete old videos you no longer need</li>
+              <li>Select 3 videos for the top gallery section</li>
+              <li>Select videos for the Free Sample Edit section</li>
+              <li>Click the save buttons to update your landing page</li>
             </ol>
           </div>
         </div>

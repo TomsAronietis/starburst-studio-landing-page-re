@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { CheckCircle, ArrowRight, Play, X } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-interface Video {
-  name: string;
-  url: string;
+interface SampleEditVideo {
+  id: string;
+  position: number;
+  video_name: string;
+  video_url: string;
 }
 
 export default function Offer() {
-  const [videos, setVideos] = useState<Video[]>([]);
+  const [videos, setVideos] = useState<SampleEditVideo[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
   const bullets = [
@@ -25,29 +27,23 @@ export default function Offer() {
   ];
 
   useEffect(() => {
-    loadVideos();
+    loadSampleEditVideos();
   }, []);
 
-  const loadVideos = async () => {
+  const loadSampleEditVideos = async () => {
     try {
-      const { data, error } = await supabase.storage.from('videos').list();
+      const { data, error } = await supabase
+        .from('sample_edit_videos')
+        .select('*')
+        .order('position', { ascending: true });
 
       if (error) throw error;
 
-      const videosWithUrls = data
-        .filter(file => file.name !== '.emptyFolderPlaceholder')
-        .map((file) => {
-          const { data: urlData } = supabase.storage.from('videos').getPublicUrl(file.name);
-          return {
-            name: file.name,
-            url: urlData.publicUrl,
-          };
-        })
-        .slice(0, 2);
-
-      setVideos(videosWithUrls);
+      if (data && data.length > 0) {
+        setVideos(data);
+      }
     } catch (error) {
-      console.error('Error loading videos:', error);
+      console.error('Error loading sample edit videos:', error);
     }
   };
 
@@ -71,14 +67,14 @@ export default function Offer() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {videos.length > 0 ? (
-            videos.map((video, index) => (
+            videos.map((video) => (
               <div
-                key={video.name}
+                key={video.id}
                 className="relative aspect-[9/16] bg-gray-800 rounded-lg overflow-hidden group cursor-pointer mx-auto w-full max-w-sm"
-                onClick={() => setSelectedVideo(video.url)}
+                onClick={() => setSelectedVideo(video.video_url)}
               >
                 <video
-                  src={video.url}
+                  src={video.video_url}
                   className="w-full h-full object-cover"
                   muted
                   playsInline

@@ -7,7 +7,6 @@ interface FeaturedVideo {
   position: number;
   video_name: string;
   video_url: string;
-  label: string;
 }
 
 export default function ProofGallery() {
@@ -37,21 +36,18 @@ export default function ProofGallery() {
             position: 1,
             video_name: 'placeholder-1',
             video_url: 'https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800',
-            label: 'Raw → Final',
           },
           {
             id: '2',
             position: 2,
             video_name: 'placeholder-2',
             video_url: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800',
-            label: 'Before / After',
           },
           {
             id: '3',
             position: 3,
             video_name: 'placeholder-3',
             video_url: 'https://images.pexels.com/photos/1475938/pexels-photo-1475938.jpeg?auto=compress&cs=tinysrgb&w=800',
-            label: 'Raw → Final',
           },
         ]);
       }
@@ -100,7 +96,7 @@ export default function ProofGallery() {
               ) : (
                 <img
                   src={video.video_url}
-                  alt={video.label}
+                  alt="Featured video"
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />

@@ -9,9 +9,30 @@ interface FeaturedVideo {
   video_url: string;
 }
 
+const DEFAULT_VIDEOS: FeaturedVideo[] = [
+  {
+    id: 'p1',
+    position: 1,
+    video_name: 'placeholder-1',
+    video_url: 'https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'p2',
+    position: 2,
+    video_name: 'placeholder-2',
+    video_url: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+  {
+    id: 'p3',
+    position: 3,
+    video_name: 'placeholder-3',
+    video_url: 'https://images.pexels.com/photos/1475938/pexels-photo-1475938.jpeg?auto=compress&cs=tinysrgb&w=800',
+  },
+];
+
 export default function ProofGallery() {
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
-  const [videos, setVideos] = useState<FeaturedVideo[]>([]);
+  const [videos, setVideos] = useState<FeaturedVideo[]>(DEFAULT_VIDEOS);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,39 +46,23 @@ export default function ProofGallery() {
         .select('*')
         .order('position', { ascending: true });
 
-      if (error) throw error;
-
-      const placeholders = [
-        {
-          id: 'p1',
-          position: 1,
-          video_name: 'placeholder-1',
-          video_url: 'https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=800',
-        },
-        {
-          id: 'p2',
-          position: 2,
-          video_name: 'placeholder-2',
-          video_url: 'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800',
-        },
-        {
-          id: 'p3',
-          position: 3,
-          video_name: 'placeholder-3',
-          video_url: 'https://images.pexels.com/photos/1475938/pexels-photo-1475938.jpeg?auto=compress&cs=tinysrgb&w=800',
-        },
-      ];
+      if (error) {
+        console.error('Query error:', error);
+        setVideos(DEFAULT_VIDEOS);
+        return;
+      }
 
       if (data && data.length > 0) {
-        const merged = placeholders.map(p =>
+        const merged = DEFAULT_VIDEOS.map(p =>
           data.find(d => d.position === p.position) || p
         );
         setVideos(merged);
       } else {
-        setVideos(placeholders);
+        setVideos(DEFAULT_VIDEOS);
       }
     } catch (error) {
       console.error('Error loading featured videos:', error);
+      setVideos(DEFAULT_VIDEOS);
     } finally {
       setLoading(false);
     }

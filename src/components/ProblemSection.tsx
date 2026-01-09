@@ -27,7 +27,7 @@ export default function ProblemSection() {
             </p>
           </div>
 
-          <p className="text-[#B89B4F] font-bold text-xl md:text-2xl">
+          <p className="text-[#B89B4F] font-bold text-xs md:text-2xl">
             Here's the truth: posting only feels awkward when you approach it the wrong way, with the wrong set up.
           </p>
 

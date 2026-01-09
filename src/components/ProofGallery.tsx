@@ -110,11 +110,6 @@ export default function ProofGallery() {
                   <Play className="w-8 h-8 text-[#B89B4F] fill-current" />
                 </div>
               </div>
-              <div className="absolute bottom-4 left-4 right-4">
-                <span className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-md text-sm font-semibold text-black inline-block">
-                  {video.label}
-                </span>
-              </div>
             </div>
           ))}
         </div>

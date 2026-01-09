@@ -9,14 +9,30 @@ interface Video {
   created_at: string;
 }
 
+interface FeaturedVideo {
+  id: string;
+  position: number;
+  video_name: string;
+  video_url: string;
+  label: string;
+}
+
 export default function AdminVideoUpload() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [featuredVideos, setFeaturedVideos] = useState<FeaturedVideo[]>([]);
+  const [selectedVideos, setSelectedVideos] = useState<{ [key: number]: string }>({});
+  const [labels, setLabels] = useState<{ [key: number]: string }>({
+    1: 'Raw → Final',
+    2: 'Before / After',
+    3: 'Raw → Final',
+  });
 
   useEffect(() => {
     loadVideos();
+    loadFeaturedVideos();
   }, []);
 
   const getErrorMessage = (error: any, action: string): string => {
@@ -131,6 +147,79 @@ export default function AdminVideoUpload() {
     }
   };
 
+  const loadFeaturedVideos = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('featured_videos')
+        .select('*')
+        .order('position', { ascending: true });
+
+      if (error) throw error;
+
+      setFeaturedVideos(data || []);
+
+      const selected: { [key: number]: string } = {};
+      const loadedLabels: { [key: number]: string } = { ...labels };
+
+      data?.forEach((fv) => {
+        selected[fv.position] = fv.video_name;
+        loadedLabels[fv.position] = fv.label;
+      });
+
+      setSelectedVideos(selected);
+      setLabels(loadedLabels);
+    } catch (error) {
+      console.error('Error loading featured videos:', error);
+    }
+  };
+
+  const handleSaveFeaturedVideos = async () => {
+    try {
+      for (let position = 1; position <= 3; position++) {
+        const videoName = selectedVideos[position];
+        const label = labels[position] || 'Raw → Final';
+
+        if (!videoName) continue;
+
+        const video = videos.find((v) => v.name === videoName);
+        if (!video) continue;
+
+        const existingFeatured = featuredVideos.find((fv) => fv.position === position);
+
+        if (existingFeatured) {
+          const { error } = await supabase
+            .from('featured_videos')
+            .update({
+              video_name: videoName,
+              video_url: video.url,
+              label: label,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', existingFeatured.id);
+
+          if (error) throw error;
+        } else {
+          const { error } = await supabase.from('featured_videos').insert({
+            position,
+            video_name: videoName,
+            video_url: video.url,
+            label: label,
+          });
+
+          if (error) throw error;
+        }
+      }
+
+      setMessage({
+        type: 'success',
+        text: 'Featured videos updated successfully! They are now live on your landing page.',
+      });
+      await loadFeaturedVideos();
+    } catch (error) {
+      setMessage({ type: 'error', text: getErrorMessage(error, 'Saving featured videos') });
+    }
+  };
+
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -240,12 +329,91 @@ export default function AdminVideoUpload() {
             )}
           </div>
 
+          {videos.length > 0 && (
+            <div className="mt-12 pt-8 border-t-2 border-gray-300">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                Featured Gallery Videos
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Select which 3 videos to display in the main gallery on your landing page
+              </p>
+
+              <div className="space-y-6">
+                {[1, 2, 3].map((position) => (
+                  <div key={position} className="bg-gray-50 rounded-lg p-6">
+                    <h3 className="font-semibold text-gray-900 mb-4">
+                      Position {position}
+                    </h3>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Select Video
+                        </label>
+                        <select
+                          value={selectedVideos[position] || ''}
+                          onChange={(e) =>
+                            setSelectedVideos({ ...selectedVideos, [position]: e.target.value })
+                          }
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B4F] focus:border-[#B89B4F] outline-none"
+                        >
+                          <option value="">-- Select a video --</option>
+                          {videos.map((video) => (
+                            <option key={video.name} value={video.name}>
+                              {video.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Display Label
+                        </label>
+                        <input
+                          type="text"
+                          value={labels[position] || ''}
+                          onChange={(e) =>
+                            setLabels({ ...labels, [position]: e.target.value })
+                          }
+                          placeholder="e.g., Raw → Final"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B4F] focus:border-[#B89B4F] outline-none"
+                        />
+                      </div>
+                    </div>
+
+                    {selectedVideos[position] && (
+                      <div className="mt-4">
+                        <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                        <div className="aspect-[9/16] max-w-[200px] bg-gray-900 rounded-lg overflow-hidden">
+                          <video
+                            src={videos.find((v) => v.name === selectedVideos[position])?.url}
+                            className="w-full h-full object-cover"
+                            controls
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={handleSaveFeaturedVideos}
+                className="mt-6 bg-[#B89B4F] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#A88B3F] transition-colors"
+              >
+                Save Featured Videos
+              </button>
+            </div>
+          )}
+
           <div className="mt-8 pt-6 border-t border-gray-200">
             <h3 className="font-semibold text-gray-900 mb-2">How to use uploaded videos:</h3>
             <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
               <li>Upload your videos using the upload area above</li>
-              <li>Videos will automatically appear on your landing page</li>
-              <li>The most recently uploaded videos will be displayed</li>
+              <li>Select 3 videos to feature in the gallery section</li>
+              <li>Customize the label for each video (e.g., "Raw → Final", "Before / After")</li>
+              <li>Click "Save Featured Videos" to update your landing page</li>
               <li>Delete old videos you no longer need</li>
             </ol>
           </div>

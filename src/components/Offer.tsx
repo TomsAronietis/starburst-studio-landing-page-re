@@ -1,6 +1,16 @@
-import { CheckCircle, ArrowRight, Play } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { CheckCircle, ArrowRight, Play, X } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+
+interface Video {
+  name: string;
+  url: string;
+}
 
 export default function Offer() {
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+
   const bullets = [
     '1 free edited video (your footage, your style)',
     'Up to 3 revisions',
@@ -13,6 +23,33 @@ export default function Offer() {
     'Send 1 clip',
     'Receive your edited sample',
   ];
+
+  useEffect(() => {
+    loadVideos();
+  }, []);
+
+  const loadVideos = async () => {
+    try {
+      const { data, error } = await supabase.storage.from('videos').list();
+
+      if (error) throw error;
+
+      const videosWithUrls = data
+        .filter(file => file.name !== '.emptyFolderPlaceholder')
+        .map((file) => {
+          const { data: urlData } = supabase.storage.from('videos').getPublicUrl(file.name);
+          return {
+            name: file.name,
+            url: urlData.publicUrl,
+          };
+        })
+        .slice(0, 2);
+
+      setVideos(videosWithUrls);
+    } catch (error) {
+      console.error('Error loading videos:', error);
+    }
+  };
 
   const handleBookCall = () => {
     document.getElementById('booking-widget')?.scrollIntoView({ behavior: 'smooth' });
@@ -33,24 +70,51 @@ export default function Offer() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          <div className="relative aspect-[9/16] bg-gray-800 rounded-lg overflow-hidden group cursor-pointer mx-auto w-full max-w-sm">
-            <img
-              src="https://images.pexels.com/photos/1546168/pexels-photo-1546168.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Example edited reel"
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300 flex items-center justify-center">
-              <div className="bg-white/90 rounded-full p-4 group-hover:scale-110 transition-transform duration-300">
-                <Play className="w-8 h-8 text-white fill-current" />
+          {videos.length > 0 ? (
+            videos.map((video, index) => (
+              <div
+                key={video.name}
+                className="relative aspect-[9/16] bg-gray-800 rounded-lg overflow-hidden group cursor-pointer mx-auto w-full max-w-sm"
+                onClick={() => setSelectedVideo(video.url)}
+              >
+                <video
+                  src={video.url}
+                  className="w-full h-full object-cover"
+                  muted
+                  playsInline
+                />
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300 flex items-center justify-center">
+                  <div className="bg-white/90 rounded-full p-4 group-hover:scale-110 transition-transform duration-300">
+                    <Play className="w-8 h-8 text-gray-900 fill-current" />
+                  </div>
+                </div>
+                <div className="absolute bottom-4 left-4 right-4">
+                  <span className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-md text-sm font-semibold text-black inline-block">
+                    Example Edit {index + 1}
+                  </span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="relative aspect-[9/16] bg-gray-800 rounded-lg overflow-hidden group cursor-pointer mx-auto w-full max-w-sm">
+              <img
+                src="https://images.pexels.com/photos/1546168/pexels-photo-1546168.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt="Example edited reel"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300 flex items-center justify-center">
+                <div className="bg-white/90 rounded-full p-4 group-hover:scale-110 transition-transform duration-300">
+                  <Play className="w-8 h-8 text-gray-900 fill-current" />
+                </div>
+              </div>
+              <div className="absolute bottom-4 left-4 right-4">
+                <span className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-md text-sm font-semibold text-black inline-block">
+                  Example Final Edit
+                </span>
               </div>
             </div>
-            <div className="absolute bottom-4 left-4 right-4">
-              <span className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-md text-sm font-semibold text-black inline-block">
-                Example Final Edit
-              </span>
-            </div>
-          </div>
+          )}
 
           <div className="flex flex-col justify-center">
             <div className="space-y-4 mb-8">
@@ -88,6 +152,29 @@ export default function Offer() {
           </div>
         </div>
       </div>
+
+      {selectedVideo && (
+        <div
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <button
+            onClick={() => setSelectedVideo(null)}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors"
+          >
+            <X className="w-8 h-8" />
+          </button>
+          <div className="relative max-w-2xl w-full aspect-[9/16]">
+            <video
+              src={selectedVideo}
+              className="w-full h-full object-contain"
+              controls
+              autoPlay
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }

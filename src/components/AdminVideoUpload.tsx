@@ -36,11 +36,14 @@ export default function AdminVideoUpload() {
   const [selectedSampleVideos, setSelectedSampleVideos] = useState<{ [key: number]: string }>({});
   const [galleryEmbedCodes, setGalleryEmbedCodes] = useState<{ [key: number]: string }>({});
   const [sampleEmbedCodes, setSampleEmbedCodes] = useState<{ [key: number]: string }>({});
+  const [bookingEmbedCode, setBookingEmbedCode] = useState<string>('');
+  const [savingBooking, setSavingBooking] = useState(false);
 
   useEffect(() => {
     loadVideos();
     loadFeaturedVideos();
     loadSampleEditVideos();
+    loadBookingWidget();
   }, []);
 
   const getErrorMessage = (error: unknown, action: string): string => {
@@ -183,6 +186,48 @@ export default function AdminVideoUpload() {
       setSelectedSampleVideos(selected);
     } catch (error) {
       console.error('Error loading sample edit videos:', error);
+    }
+  };
+
+  const loadBookingWidget = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('booking_widget')
+        .select('embed_code')
+        .eq('id', 1)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data?.embed_code) {
+        setBookingEmbedCode(data.embed_code);
+      }
+    } catch (error) {
+      console.error('Error loading booking widget:', error);
+    }
+  };
+
+  const handleSaveBookingWidget = async () => {
+    setSavingBooking(true);
+    try {
+      const { error } = await supabase
+        .from('booking_widget')
+        .update({
+          embed_code: bookingEmbedCode,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', 1);
+
+      if (error) throw error;
+
+      setMessage({
+        type: 'success',
+        text: 'Booking widget updated successfully!',
+      });
+    } catch (error) {
+      setMessage({ type: 'error', text: getErrorMessage(error, 'Saving booking widget') });
+    } finally {
+      setSavingBooking(false);
     }
   };
 
@@ -535,12 +580,45 @@ export default function AdminVideoUpload() {
             </>
           )}
 
+          <div className="mt-12 pt-8 border-t-2 border-gray-300">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              Booking Widget
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Paste your Calendly, Cal.com, or other booking platform embed code here
+            </p>
+
+            <div className="bg-gray-50 rounded-lg p-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Embed code
+              </label>
+              <textarea
+                value={bookingEmbedCode}
+                onChange={(e) => setBookingEmbedCode(e.target.value)}
+                placeholder="Paste the complete embed code here (e.g., <div class=calendly-inline-widget...)"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B4F] focus:border-[#B89B4F] outline-none font-mono text-sm"
+                rows={6}
+              />
+              <p className="text-xs text-gray-500 mt-2 mb-4">
+                To get the embed code: Go to your booking platform (Calendly, Cal.com, etc.), find the Share or Embed option, and copy the full code
+              </p>
+              <button
+                onClick={handleSaveBookingWidget}
+                disabled={savingBooking}
+                className="bg-[#B89B4F] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#A88B3F] transition-colors disabled:opacity-50 flex items-center gap-2"
+              >
+                {savingBooking && <Loader2 className="w-4 h-4 animate-spin" />}
+                Save Booking Widget
+              </button>
+            </div>
+          </div>
+
           <div className="mt-8 pt-6 border-t border-gray-200">
             <h3 className="font-semibold text-gray-900 mb-2">How to use:</h3>
             <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
               <li>Upload your videos using the upload area above</li>
               <li>For each gallery position, either select an uploaded video OR paste an embed code from Wistia, Vimeo, YouTube, etc.</li>
-              <li>To get an embed code: In your video hosting platform, look for a "Share" or "Embed" button and copy the iframe code</li>
+              <li>Add your booking widget embed code in the Booking Widget section above</li>
               <li>Click the save buttons to update your landing page - changes appear instantly!</li>
             </ol>
           </div>

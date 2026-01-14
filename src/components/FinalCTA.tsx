@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import BookingWidget from './BookingWidget';
 
 export default function FinalCTA() {
   const handleBookCall = () => {
@@ -37,20 +38,17 @@ export default function FinalCTA() {
 
       <section id="booking-widget" className="bg-white py-16 md:py-24">
         <div className="max-w-[1100px] mx-auto px-6 md:px-8">
-          <div className="bg-gray-100 rounded-xl p-12 text-center min-h-[500px] flex flex-col items-center justify-center">
-            <div className="mb-6">
-              <img src="/image.png" alt="Starburst Studio" className="h-12 w-12 mx-auto mb-4 rounded-full object-cover" />
-            </div>
-            <h3 className="font-serif text-2xl md:text-3xl text-black mb-4">
+          <div className="text-center mb-8">
+            <h3 className="font-serif text-2xl md:text-3xl text-black mb-2">
               Ready to get started?
             </h3>
-            <p className="text-gray-600 mb-8 max-w-md">
-              Booking widget will be embedded here. Connect your preferred scheduling tool (Calendly, Cal.com, etc.)
+            <p className="text-gray-600 max-w-md mx-auto">
+              Schedule your free consultation below
             </p>
-            <div className="bg-white rounded-lg p-8 shadow-md max-w-md w-full">
-              <p className="text-sm text-gray-500 italic">
-                [Booking widget placeholder - integrate your scheduling tool here]
-              </p>
+          </div>
+          <div className="flex justify-center">
+            <div className="w-full max-w-lg">
+              <BookingWidget />
             </div>
           </div>
         </div>

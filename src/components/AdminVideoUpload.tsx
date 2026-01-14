@@ -14,6 +14,7 @@ interface FeaturedVideo {
   position: number;
   video_name: string;
   video_url: string;
+  embed_code?: string | null;
 }
 
 interface SampleEditVideo {
@@ -33,6 +34,8 @@ export default function AdminVideoUpload() {
   const [sampleEditVideos, setSampleEditVideos] = useState<SampleEditVideo[]>([]);
   const [selectedGalleryVideos, setSelectedGalleryVideos] = useState<{ [key: number]: string }>({});
   const [selectedSampleVideos, setSelectedSampleVideos] = useState<{ [key: number]: string }>({});
+  const [galleryEmbedCodes, setGalleryEmbedCodes] = useState<{ [key: number]: string }>({});
+  const [sampleEmbedCodes, setSampleEmbedCodes] = useState<{ [key: number]: string }>({});
 
   useEffect(() => {
     loadVideos();
@@ -148,10 +151,15 @@ export default function AdminVideoUpload() {
       setFeaturedVideos(data || []);
 
       const selected: { [key: number]: string } = {};
+      const embeds: { [key: number]: string } = {};
       data?.forEach((fv) => {
         selected[fv.position] = fv.video_name;
+        if (fv.embed_code) {
+          embeds[fv.position] = fv.embed_code;
+        }
       });
       setSelectedGalleryVideos(selected);
+      setGalleryEmbedCodes(embeds);
     } catch (error) {
       console.error('Error loading featured videos:', error);
     }
@@ -183,31 +191,32 @@ export default function AdminVideoUpload() {
     try {
       for (let position = 1; position <= 3; position++) {
         const videoName = selectedGalleryVideos[position];
-        if (!videoName) continue;
+        const embedCode = galleryEmbedCodes[position];
 
-        const video = videos.find((v) => v.name === videoName);
-        if (!video) continue;
+        if (!videoName && !embedCode) continue;
 
+        const video = videoName ? videos.find((v) => v.name === videoName) : null;
         const existingFeatured = featuredVideos.find((fv) => fv.position === position);
+
+        const updateData = {
+          label: 'Video',
+          updated_at: new Date().toISOString(),
+          video_name: videoName || '',
+          video_url: video?.url || '',
+          embed_code: embedCode || null,
+        };
 
         if (existingFeatured) {
           const { error } = await supabase
             .from('featured_videos')
-            .update({
-              video_name: videoName,
-              video_url: video.url,
-              label: 'Video',
-              updated_at: new Date().toISOString(),
-            })
+            .update(updateData)
             .eq('id', existingFeatured.id);
 
           if (error) throw error;
-        } else {
+        } else if (videoName || embedCode) {
           const { error } = await supabase.from('featured_videos').insert({
             position,
-            video_name: videoName,
-            video_url: video.url,
-            label: 'Video',
+            ...updateData,
           });
 
           if (error) throw error;
@@ -391,34 +400,73 @@ export default function AdminVideoUpload() {
                   Select 3 videos to display in the main gallery at the top of your landing page
                 </p>
 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {[1, 2, 3].map((position) => (
-                    <div key={position} className="bg-gray-50 rounded-lg p-4">
-                      <div className="flex items-center gap-4">
-                        <span className="font-semibold text-gray-900 w-24">Position {position}</span>
-                        <select
-                          value={selectedGalleryVideos[position] || ''}
-                          onChange={(e) =>
-                            setSelectedGalleryVideos({ ...selectedGalleryVideos, [position]: e.target.value })
-                          }
-                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B4F] focus:border-[#B89B4F] outline-none"
-                        >
-                          <option value="">-- Select a video --</option>
-                          {videos.map((video) => (
-                            <option key={video.name} value={video.name}>
-                              {video.name}
-                            </option>
-                          ))}
-                        </select>
-                        {selectedGalleryVideos[position] && (
-                          <div className="w-16 h-28 bg-gray-900 rounded overflow-hidden flex-shrink-0">
-                            <video
-                              src={videos.find((v) => v.name === selectedGalleryVideos[position])?.url}
-                              className="w-full h-full object-cover"
-                              muted
-                            />
+                    <div key={position} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                      <h3 className="font-semibold text-gray-900 mb-4">Position {position}</h3>
+
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Upload from storage or select video
+                          </label>
+                          <select
+                            value={selectedGalleryVideos[position] || ''}
+                            onChange={(e) => {
+                              setSelectedGalleryVideos({ ...selectedGalleryVideos, [position]: e.target.value });
+                              if (e.target.value) {
+                                setGalleryEmbedCodes({ ...galleryEmbedCodes, [position]: '' });
+                              }
+                            }}
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B4F] focus:border-[#B89B4F] outline-none"
+                          >
+                            <option value="">-- Select a video --</option>
+                            {videos.map((video) => (
+                              <option key={video.name} value={video.name}>
+                                {video.name}
+                              </option>
+                            ))}
+                          </select>
+                          {selectedGalleryVideos[position] && (
+                            <div className="mt-3 w-24 h-40 bg-gray-900 rounded overflow-hidden">
+                              <video
+                                src={videos.find((v) => v.name === selectedGalleryVideos[position])?.url}
+                                className="w-full h-full object-cover"
+                                muted
+                              />
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="relative">
+                          <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300" />
                           </div>
-                        )}
+                          <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-gray-50 text-gray-500">OR</span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Embed code from Wistia, Vimeo, YouTube, etc.
+                          </label>
+                          <textarea
+                            value={galleryEmbedCodes[position] || ''}
+                            onChange={(e) => {
+                              setGalleryEmbedCodes({ ...galleryEmbedCodes, [position]: e.target.value });
+                              if (e.target.value) {
+                                setSelectedGalleryVideos({ ...selectedGalleryVideos, [position]: '' });
+                              }
+                            }}
+                            placeholder="Paste the embed code here (e.g., <iframe src=... ></iframe>)"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B89B4F] focus:border-[#B89B4F] outline-none font-mono text-sm"
+                            rows={3}
+                          />
+                          <p className="text-xs text-gray-500 mt-1">
+                            Paste the complete embed code from your video hosting platform
+                          </p>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -491,9 +539,9 @@ export default function AdminVideoUpload() {
             <h3 className="font-semibold text-gray-900 mb-2">How to use:</h3>
             <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
               <li>Upload your videos using the upload area above</li>
-              <li>Select 3 videos for the top gallery section</li>
-              <li>Select videos for the Free Sample Edit section</li>
-              <li>Click the save buttons to update your landing page</li>
+              <li>For each gallery position, either select an uploaded video OR paste an embed code from Wistia, Vimeo, YouTube, etc.</li>
+              <li>To get an embed code: In your video hosting platform, look for a "Share" or "Embed" button and copy the iframe code</li>
+              <li>Click the save buttons to update your landing page - changes appear instantly!</li>
             </ol>
           </div>
         </div>

@@ -7,6 +7,7 @@ interface FeaturedVideo {
   position: number;
   video_name: string;
   video_url: string;
+  embed_code?: string | null;
 }
 
 const DEFAULT_VIDEOS: FeaturedVideo[] = [
@@ -92,6 +93,15 @@ export default function ProofGallery() {
            url.match(/\.(mp4|mov|webm|ogg)$/i);
   };
 
+  const renderEmbedCode = (embedCode: string) => {
+    return (
+      <div
+        className="w-full h-full"
+        dangerouslySetInnerHTML={{ __html: embedCode }}
+      />
+    );
+  };
+
   if (loading) {
     return (
       <section id="proof-gallery" className="bg-white py-16 md:py-24">
@@ -116,7 +126,11 @@ export default function ProofGallery() {
               className="relative aspect-[9/16] bg-gray-100 rounded-lg overflow-hidden group cursor-pointer"
               onClick={() => setActiveVideo(index)}
             >
-              {isVideoFile(video.video_url) ? (
+              {video.embed_code ? (
+                <div className="w-full h-full [&_iframe]:w-full [&_iframe]:h-full">
+                  {renderEmbedCode(video.embed_code)}
+                </div>
+              ) : isVideoFile(video.video_url) ? (
                 <video
                   src={video.video_url}
                   className="w-full h-full object-cover"

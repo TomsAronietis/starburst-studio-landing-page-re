@@ -16,10 +16,6 @@ export default function BookingWidget() {
   }, []);
 
   return (
-    <div
-      className="calendly-inline-widget"
-      data-url="https://calendly.com/starburstcraftstudio"
-      style={{ minWidth: '320px', height: '700px' }}
-    />
+    <div className="calendly-inline-widget" data-url="https://calendly.com/starburstcraftstudio" style="min-width:320px;height:700px;"></div>
   );
 }

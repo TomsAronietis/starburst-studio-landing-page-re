@@ -3,15 +3,15 @@ import { Play } from 'lucide-react';
 const GALLERY_VIDEOS = [
   {
     id: 1,
-    embedCode: `<iframe src="https://fast.wistia.net/embed/iframe/dp8z1jbu7a" allow="autoplay; fullscreen" allowtransparency="true" frameborder="0" scrolling="no" style="width:100%;height:100%;position:absolute;left:0;top:0;" class="wistia_embed" name="wistia_embed"></iframe>`,
+    embedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/dp8z1jbu7a.js" async type="module"></script><style>wistia-player[media-id='dp8z1jbu7a']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/dp8z1jbu7a/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style><wistia-player media-id="dp8z1jbu7a" aspect="0.5625"></wistia-player>`,
   },
   {
     id: 2,
-    embedCode: `<iframe src="https://fast.wistia.net/embed/iframe/REPLACE_WITH_YOUR_VIDEO_ID_2" allow="autoplay; fullscreen" allowtransparency="true" frameborder="0" scrolling="no" style="width:100%;height:100%;position:absolute;left:0;top:0;" class="wistia_embed" name="wistia_embed"></iframe>`,
+    embedCode: `<iframe src="https://fast.wistia.net/embed/iframe/REPLACE_WITH_YOUR_VIDEO_ID_2" allow="autoplay; fullscreen" style="width:100%;height:100%;position:absolute;left:0;top:0;overflow:hidden;"></iframe>`,
   },
   {
     id: 3,
-    embedCode: `<iframe src="https://fast.wistia.net/embed/iframe/REPLACE_WITH_YOUR_VIDEO_ID_3" allow="autoplay; fullscreen" allowtransparency="true" frameborder="0" scrolling="no" style="width:100%;height:100%;position:absolute;left:0;top:0;" class="wistia_embed" name="wistia_embed"></iframe>`,
+    embedCode: `<iframe src="https://fast.wistia.net/embed/iframe/REPLACE_WITH_YOUR_VIDEO_ID_3" allow="autoplay; fullscreen" style="width:100%;height:100%;position:absolute;left:0;top:0;overflow:hidden;"></iframe>`,
   },
 ];
 

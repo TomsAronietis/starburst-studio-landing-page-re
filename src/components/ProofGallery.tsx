@@ -5,11 +5,11 @@ const GALLERY_VIDEOS = [
   },
   {
     id: 2,
-    embedCode: `<iframe src="https://fast.wistia.net/embed/iframe/REPLACE_WITH_YOUR_VIDEO_ID_2" allow="autoplay; fullscreen" style="width:100%;height:100%;position:absolute;left:0;top:0;overflow:hidden;"></iframe>`,
+    embedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/hc1rqua2j3.js" async type="module"></script><style>wistia-player[media-id='hc1rqua2j3']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/hc1rqua2j3/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style> <wistia-player media-id="hc1rqua2j3" aspect="0.5625"></wistia-player>`,
   },
   {
     id: 3,
-    embedCode: `<iframe src="https://fast.wistia.net/embed/iframe/REPLACE_WITH_YOUR_VIDEO_ID_3" allow="autoplay; fullscreen" style="width:100%;height:100%;position:absolute;left:0;top:0;overflow:hidden;"></iframe>`,
+    embedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/4pvytdn6oo.js" async type="module"></script><style>wistia-player[media-id='4pvytdn6oo']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/4pvytdn6oo/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style> <wistia-player media-id="4pvytdn6oo" aspect="0.5625"></wistia-player>`,
   },
 ];
 

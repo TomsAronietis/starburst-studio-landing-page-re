@@ -1,9 +1,7 @@
-import { Play } from 'lucide-react';
-
 const GALLERY_VIDEOS = [
   {
     id: 1,
-    embedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/dp8z1jbu7a.js" async type="module"></script><style>wistia-player[media-id='dp8z1jbu7a']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/dp8z1jbu7a/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style><wistia-player media-id="dp8z1jbu7a" aspect="0.5625"></wistia-player>`,
+    embedCode: `<script src="https://fast.wistia.com/embed/dp8z1jbu7a.js" async type="module"></script><wistia-player media-id="dp8z1jbu7a" aspect="0.5625"></wistia-player>`,
   },
   {
     id: 2,
@@ -26,14 +24,9 @@ export default function ProofGallery() {
               className="relative aspect-[9/16] bg-gray-900 rounded-lg overflow-hidden"
             >
               <div
-                className="w-full h-full [&_iframe]:w-full [&_iframe]:h-full"
+                className="w-full h-full [&_iframe]:w-full [&_iframe]:h-full [&_wistia-player]:w-full [&_wistia-player]:h-full"
                 dangerouslySetInnerHTML={{ __html: video.embedCode }}
               />
-              <div className="absolute inset-0 bg-black/40 hover:bg-black/20 transition-colors duration-300 flex items-center justify-center pointer-events-none opacity-0 hover:opacity-100">
-                <div className="bg-white/90 rounded-full p-4">
-                  <Play className="w-8 h-8 text-[#B89B4F] fill-current" />
-                </div>
-              </div>
             </div>
           ))}
         </div>

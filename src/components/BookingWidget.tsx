@@ -5,7 +5,7 @@ export default function BookingWidget() {
         className="calendly-inline-widget w-full"
         data-url="https://calendly.com/starburstcraftstudio"
         style={{ minWidth: '320px', height: '700px' }}
-      />
+      ></div>
     </div>
   );
 }

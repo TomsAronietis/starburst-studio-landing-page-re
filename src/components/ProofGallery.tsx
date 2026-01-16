@@ -3,7 +3,7 @@ import { Play } from 'lucide-react';
 const GALLERY_VIDEOS = [
   {
     id: 1,
-    embedCode: `<iframe src="https://fast.wistia.net/embed/iframe/REPLACE_WITH_YOUR_VIDEO_ID_1" allow="autoplay; fullscreen" style="width:100%;height:100%;position:absolute;left:0;top:0;overflow:hidden;"></iframe>`,
+    embedCode: `<iframe src="https://lviiqggjrutffaivniyt.supabase.co/storage/v1/object/public/videos/1767971414365-a9vqq.mp4" allow="autoplay; fullscreen" style="width:100%;height:100%;position:absolute;left:0;top:0;overflow:hidden;"></iframe>`,
   },
   {
     id: 2,

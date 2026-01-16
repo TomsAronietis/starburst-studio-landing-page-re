@@ -3,7 +3,7 @@ import { Play } from 'lucide-react';
 const GALLERY_VIDEOS = [
   {
     id: 1,
-    embedCode: `<iframe src="https://lviiqggjrutffaivniyt.supabase.co/storage/v1/object/public/videos/1767971414365-a9vqq.mp4" allow="autoplay; fullscreen" style="width:100%;height:100%;position:absolute;left:0;top:0;overflow:hidden;"></iframe>`,
+    embedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/dp8z1jbu7a.js" async type="module"></script><style>wistia-player[media-id='dp8z1jbu7a']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/dp8z1jbu7a/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style><wistia-player media-id="dp8z1jbu7a" aspect="0.5625"></wistia-player>`,
   },
   {
     id: 2,

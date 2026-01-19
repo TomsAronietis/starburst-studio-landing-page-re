@@ -3,10 +3,10 @@ export default function ProblemSection() {
     <section className="bg-white pt-16 md:pt-24 pb-6 md:pb-8">
       <div className="max-w-[1100px] mx-auto px-6 md:px-8 flex flex-col items-center">
         <h2 className="font-serif text-3xl md:text-5xl text-black leading-tight mb-8 max-w-3xl text-center">
-          You've heard this a thousand times already: <span className="text-[#B89B4F] font-bold">social media matters</span>.
+          You've heard this a thousand times already: <span className="text-[#B89B4F]">social media matters</span>.
         </h2>
 
-        <div className="max-w-3xl space-y-6 text-lg md:text-xl text-black leading-relaxed text-center">
+        <div className="max-w-3xl space-y-6 text-base md:text-lg text-black leading-relaxed text-center">
           <p>
             But, as a realtor, you already have 101 things on your to-do list.
           </p>
@@ -27,7 +27,7 @@ export default function ProblemSection() {
             </p>
           </div>
 
-          <p className="text-[#B89B4F] font-bold text-xl md:text-2xl">
+          <p className="text-[#B89B4F] text-base md:text-lg">
             Here's the truth: posting only feels awkward when you approach it the wrong way, with the wrong set up.
           </p>
 

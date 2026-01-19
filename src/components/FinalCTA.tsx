@@ -15,10 +15,10 @@ export default function FinalCTA() {
               Don't settle for "good enough" videos that <span className="text-[#B89B4F]">undersell you</span>.
             </h2>
 
-            <div className="space-y-4 text-xl md:text-2xl text-black mb-10">
+            <div className="space-y-4 text-base md:text-lg text-black mb-10">
               <p>Being a realtor is not easy.</p>
               <p>Your service isn't cheap.</p>
-              <p className="font-semibold text-[#B89B4F]">We'll help your marketing show that.</p>
+              <p className="text-[#B89B4F]">We'll help your marketing show that.</p>
             </div>
 
             <button
@@ -42,7 +42,7 @@ export default function FinalCTA() {
             <h3 className="font-serif text-2xl md:text-3xl text-black mb-2">
               Ready to get started?
             </h3>
-            <p className="text-gray-600 max-w-md mx-auto">
+            <p className="text-sm md:text-base text-gray-600 max-w-md mx-auto">
               Schedule your free consultation below
             </p>
           </div>

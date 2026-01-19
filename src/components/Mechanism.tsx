@@ -40,10 +40,10 @@ export default function Mechanism() {
               </svg>
               <div className="relative bg-white p-6 h-full flex flex-col justify-center">
                 <div className="flex gap-4 items-start">
-                  <div className="w-8 h-8 rounded-full bg-[#B89B4F] text-white flex items-center justify-center font-bold flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[#B89B4F] text-white flex items-center justify-center flex-shrink-0">
                     {index + 1}
                   </div>
-                  <p className="text-lg text-black leading-relaxed pt-0.5">{step}</p>
+                  <p className="text-sm md:text-base text-black leading-relaxed pt-0.5">{step}</p>
                 </div>
               </div>
             </div>

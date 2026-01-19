@@ -113,12 +113,12 @@ export default function Offer() {
             </div>
 
             <div className="bg-white/15 backdrop-blur-sm rounded-lg p-6 mb-8">
-              <p className="text-white font-semibold mb-4 text-lg">How it works:</p>
+              <p className="text-white mb-4 text-sm">How it works:</p>
               <div className="space-y-3">
                 {steps.map((step, index) => (
                   <div key={index} className="flex gap-3 items-center">
-                    <span className="text-white font-bold text-xl">{index + 1}.</span>
-                    <p className="text-white">{step}</p>
+                    <span className="text-white text-lg">{index + 1}.</span>
+                    <p className="text-white text-sm">{step}</p>
                   </div>
                 ))}
               </div>

@@ -13,7 +13,7 @@ export default function ProofStrip() {
       <div className="flex animate-scroll whitespace-nowrap">
         {doubledItems.map((item, index) => (
           <div key={index} className="flex items-center">
-            <span className="text-white text-lg md:text-xl font-semibold px-8">
+            <span className="text-white text-base md:text-lg px-8">
               {item}
             </span>
             <span className="text-[#B89B4F] text-2xl">✦</span>

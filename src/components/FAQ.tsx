@@ -7,7 +7,7 @@ export default function FAQ() {
   const faqs = [
     {
       question: 'Will hiring a video editor actually get me clients?',
-      answer: "Editing alone isn’t magic, but premium videos make you stand out, look credible, and win more deals.",
+      answer: "Editing alone isn’t magic, but premium videos make you stand out, look credible, and professional. Leading to more closed deals.",
     },
     {
       question: "I tried content before and it didn't work.",

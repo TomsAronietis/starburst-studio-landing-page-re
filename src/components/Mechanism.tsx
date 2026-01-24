@@ -5,7 +5,7 @@ export default function Mechanism() {
     'You show us the style and what you want your videos to look like.',
     'Upload your video clips into our system.',
     'We edit with professional software and review against our quality standards.',
-    'You see status, updates, and changes without chasing.',
+    'You see status updates, and changes without chasing.',
     'Request changes and we fix them within 48 hours.',
   ];
 

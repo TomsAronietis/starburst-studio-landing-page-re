@@ -23,7 +23,7 @@ export default function Hero() {
 
           <div className="mb-6 flex flex-col items-center">
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-black leading-[1.2] md:leading-[1.1] mb-3 max-w-4xl">
-              Look like a <span className="text-[#B89B4F]">luxury top-producer</span>, without the headache.
+              Look like a <span className="text-[#B89B4F]">luxury top producer</span>, without the headache.
             </h1>
             <svg className="w-32 md:w-48 h-6" viewBox="0 0 200 30" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -36,7 +36,7 @@ export default function Hero() {
           </div>
 
           <p className="text-base md:text-2xl text-black leading-relaxed mb-6 max-w-3xl font-light">
-            We'll turn your raw real estate clips into clean, premium videos that attract clients, keep you smiling and wanting to post again.
+            We'll transform your raw real estate clips into professional videos that attract clients and keep you smiling.
           </p>
 
           <p className="text-lg md:text-xl text-black mb-8 max-w-2xl font-semibold">

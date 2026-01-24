@@ -40,7 +40,7 @@ export default function Hero() {
           </p>
 
           <p className="text-lg md:text-xl text-black mb-8 max-w-2xl font-semibold">
-            No guesswork. No hours of editing. No babysitting. Guaranteed.
+            No guesswork. No missed deadlines. No babysitting. Guaranteed.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center">

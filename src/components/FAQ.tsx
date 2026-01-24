@@ -7,15 +7,15 @@ export default function FAQ() {
   const faqs = [
     {
       question: 'Will hiring a video editor actually get me clients?',
-      answer: "Editing alone isn't magic, but premium videos help you stand out and look credible instead of blending in.",
+      answer: "Editing alone isn’t magic, but premium videos make you stand out, look credible, and win more deals.",
     },
     {
       question: "I tried content before and it didn't work.",
-      answer: "Doing it alone is hard. With a team, consistency becomes easier and results start compounding.",
+      answer: "Doing anything, whether it's sports, self-improvement, or studying, is hard. With a team, it's easier to stay consistent until results start compounding.",
     },
     {
       question: 'Why not hire someone on Fiverr?',
-      answer: "Cheap often means missed instructions, templates, and babysitting. We're built for reliability and quality.",
+      answer: "Cheap often means missed instructions, templates, and babysitting. Clients choose us mainly for our reliability, quality, and timely delivery.",
     },
     {
       question: "I don't have time to film.",
@@ -23,11 +23,11 @@ export default function FAQ() {
     },
     {
       question: 'I feel uncomfortable posting.',
-      answer: "Most of the time, it's because the videos don't match who you are. We lock your style first so your content feels right.",
+      answer: "Most of the time, it's because the videos don't match who you are. We lock your style first so your content feels just like you.",
     },
     {
       question: "I don't want generic edits.",
-      answer: 'We lock your style before editing to avoid templates.',
+      answer: 'We edit your videos fully custom to your brand? Want a revision? Send us a message!',
     },
     {
       question: "How do I know you'll hit deadlines?",

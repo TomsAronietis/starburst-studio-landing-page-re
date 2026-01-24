@@ -3,7 +3,7 @@ import { CheckCircle } from 'lucide-react';
 export default function AudienceFit() {
   const bullets = [
     'Save hours every week',
-    'Post consistently without it feeling like a chore',
+    'Post regularly while enjoying the process.',
     'Get more from their marketing without adding more work',
     'Build a brand that looks like the top producer in their area',
     'Stop babysitting editors or waiting all day for updates',

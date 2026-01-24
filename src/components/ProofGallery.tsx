@@ -5,7 +5,7 @@ const GALLERY_VIDEOS = [
   },
   {
     id: 2,
-    embedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/hc1rqua2j3.js" async type="module"></script><style>wistia-player[media-id='hc1rqua2j3']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/hc1rqua2j3/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style> <wistia-player media-id="hc1rqua2j3" aspect="0.5625"></wistia-player>`,
+    embedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/dp8z1jbu7a.js" async type="module"></script><style>wistia-player[media-id='dp8z1jbu7a']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/dp8z1jbu7a/swatch'); display: block; filter: blur(5px); padding-top:177.78%; }</style> <wistia-player media-id="dp8z1jbu7a" aspect="0.5625"></wistia-player>`,
   },
   {
     id: 3,

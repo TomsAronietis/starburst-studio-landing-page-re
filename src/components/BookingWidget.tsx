@@ -15,7 +15,7 @@ export default function BookingWidget() {
     const initCalendly = () => {
       if (window.Calendly && containerRef.current) {
         window.Calendly.initInlineWidget({
-          url: 'https://calendly.com/starburststudiorealestate/30min',
+          url: 'https://calendly.com/starburststudiorealestate/30min?',
           parentElement: containerRef.current,
         });
       }

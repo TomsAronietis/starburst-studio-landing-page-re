@@ -9,95 +9,88 @@ declare global {
 }
 
 export default function BookingWidget() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const initializedRef = useRef(false);
 
   useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
     const SCRIPT_SRC = "https://app.cal.com/embed/embed.js";
+    const ORIGIN = "https://app.cal.com";
     const NAMESPACE = "free-sample-edit";
     const CAL_LINK = "starburststudio/free-sample-edit";
-    const ORIGIN = "https://app.cal.com";
+    const ELEMENT_ID = "my-cal-inline-free-sample-edit";
 
-    let intervalId: number | null = null;
+    // 1) Create Cal bootstrap/stub (same as Cal's official embed snippet)
+    if (!window.Cal) {
+      (function (C: any, A: any, L: any) {
+        let p = function (a: any, ar: any) {
+          a.q.push(ar);
+        };
+        let d = C.document;
+        C.Cal =
+          C.Cal ||
+          function () {
+            let cal = C.Cal;
+            let ar = arguments;
+            if (!cal.loaded) {
+              cal.ns = {};
+              cal.q = cal.q || [];
+              d.head.appendChild(d.createElement("script")).src = A;
+              cal.loaded = true;
+            }
+            if (ar[0] === L) {
+              const api = function () {
+                p(api, arguments);
+              };
+              const namespace = ar[1];
+              api.q = api.q || [];
+              if (typeof namespace === "string") {
+                cal.ns[namespace] = cal.ns[namespace] || api;
+                p(cal.ns[namespace], ar);
+                p(cal, ["initNamespace", namespace]);
+              } else p(cal, ar);
+              return;
+            }
+            p(cal, ar);
+          };
+      })(window, SCRIPT_SRC, "init");
+    }
 
-    const initCal = () => {
-      if (!containerRef.current || !window.Cal) return;
+    // 2) Initialize + mount inline widget
+    window.Cal("init", NAMESPACE, { origin: ORIGIN });
 
-      // Ensure container is empty before mounting (prevents duplicates on re-render)
-      containerRef.current.innerHTML = "";
-
-      // Init Cal namespace
-      window.Cal("init", NAMESPACE, { origin: ORIGIN });
-
-      // Inline embed
-      window.Cal.ns[NAMESPACE]("inline", {
-        elementOrSelector: containerRef.current, // pass the actual element (safer in React)
-        calLink: CAL_LINK,
-        config: {
-          layout: "month_view",
-          useSlotsViewOnSmallScreen: true,
-          theme: "light",
-        },
-      });
-
-      // UI options
-      window.Cal.ns[NAMESPACE]("ui", {
-        theme: "light",
-        cssVarsPerTheme: {
-          light: { "cal-brand": "#f6c92d" },
-          dark: { "cal-brand": "#fdfea2" },
-        },
-        hideEventTypeDetails: false,
+    window.Cal.ns[NAMESPACE]("inline", {
+      elementOrSelector: `#${ELEMENT_ID}`, // selector is the most reliable in React
+      calLink: CAL_LINK,
+      config: {
         layout: "month_view",
-      });
-    };
+        useSlotsViewOnSmallScreen: "true",
+        theme: "light",
+      },
+    });
 
-    const loadScriptIfNeeded = () => {
-      // Already loaded
-      if (window.Cal) {
-        initCal();
-        return;
-      }
-
-      // Script tag already exists (maybe loaded elsewhere)
-      const existing = document.querySelector<HTMLScriptElement>(
-        `script[src="${SCRIPT_SRC}"]`
-      );
-
-      if (!existing) {
-        const script = document.createElement("script");
-        script.src = SCRIPT_SRC;
-        script.async = true;
-        script.onload = initCal;
-        document.head.appendChild(script);
-      }
-
-      // Fallback: poll until Cal is available (covers cases where onload doesn't fire as expected)
-      intervalId = window.setInterval(() => {
-        if (window.Cal) {
-          if (intervalId) window.clearInterval(intervalId);
-          intervalId = null;
-          initCal();
-        }
-      }, 100);
-    };
-
-    loadScriptIfNeeded();
-
-    return () => {
-      if (intervalId) window.clearInterval(intervalId);
-      intervalId = null;
-
-      // Clean up the container on unmount
-      if (containerRef.current) containerRef.current.innerHTML = "";
-    };
+    window.Cal.ns[NAMESPACE]("ui", {
+      theme: "light",
+      cssVarsPerTheme: {
+        light: { "cal-brand": "#f6c92d" },
+        dark: { "cal-brand": "#fdfea2" },
+      },
+      hideEventTypeDetails: false,
+      layout: "month_view",
+    });
   }, []);
 
   return (
     <div className="bg-white rounded-lg shadow-sm">
       <div
-        ref={containerRef}
-        className="w-full"
-        style={{ minWidth: "320px", height: "700px", overflow: "auto" }}
+        id="my-cal-inline-free-sample-edit"
+        style={{
+          width: "100%",
+          height: "700px",
+          overflow: "auto",
+          minWidth: "320px",
+        }}
       />
     </div>
   );

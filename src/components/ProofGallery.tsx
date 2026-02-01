@@ -9,7 +9,7 @@ const GALLERY_VIDEOS = [
   },
   {
     id: 3,
-    embedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/o4j05wlxkx.js" async type="module"></script><style>wistia-player[media-id='o4j05wlxkx']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/o4j05wlxkx/swatch'); display: block; filter: blur(5px); padding-top:56.25%; }</style> <wistia-player media-id="o4j05wlxkx" aspect="1.7777777777777777"></wistia-player>`,
+    embedCode: `<script src="https://fast.wistia.com/player.js" async></script><script src="https://fast.wistia.com/embed/3n0cs2e0lq.js" async type="module"></script><style>wistia-player[media-id='3n0cs2e0lq']:not(:defined) { background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/3n0cs2e0lq/swatch'); display: block; filter: blur(5px); padding-top:176.02%; }</style> <wistia-player media-id="3n0cs2e0lq" aspect="0.5681220410310363"></wistia-player>`,
   },
 ];
 

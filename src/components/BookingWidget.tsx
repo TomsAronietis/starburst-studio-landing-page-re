@@ -1,27 +1,10 @@
-import { useEffect, useRef } from 'react';
-import Cal, { getCalApi } from "@calcom/embed-react";
-import { useEffect } from "react";
-export default function MyApp() {
-  useEffect(() => {
-    (async function () {
-      const cal = await getCalApi({"namespace":"free-sample-edit"});
-      cal("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
-    })();
-  }, [])
-  return <Cal namespace="free-sample-edit"
-    calLink="starburststudio/free-sample-edit"
-    style={{width:"100%",height:"100%",overflow:"scroll"}}
-    config={{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}}
-    
-    
-  />;
-};
+"use client";
+
+import { useEffect, useRef } from "react";
 
 declare global {
   interface Window {
-    Calendly?: {
-      initInlineWidget: (options: { url: string; parentElement: HTMLElement }) => void;
-    };
+    Cal?: any;
   }
 }
 
@@ -29,27 +12,84 @@ export default function BookingWidget() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const initCalendly = () => {
-      if (window.Calendly && containerRef.current) {
-        window.Calendly.initInlineWidget({
-          url: 'https://calendly.com/starburststudiorealestate/30min?',
-          parentElement: containerRef.current,
-        });
-      }
+    const SCRIPT_SRC = "https://app.cal.com/embed/embed.js";
+    const NAMESPACE = "free-sample-edit";
+    const CAL_LINK = "starburststudio/free-sample-edit";
+    const ORIGIN = "https://app.cal.com";
+
+    let intervalId: number | null = null;
+
+    const initCal = () => {
+      if (!containerRef.current || !window.Cal) return;
+
+      // Ensure container is empty before mounting (prevents duplicates on re-render)
+      containerRef.current.innerHTML = "";
+
+      // Init Cal namespace
+      window.Cal("init", NAMESPACE, { origin: ORIGIN });
+
+      // Inline embed
+      window.Cal.ns[NAMESPACE]("inline", {
+        elementOrSelector: containerRef.current, // pass the actual element (safer in React)
+        calLink: CAL_LINK,
+        config: {
+          layout: "month_view",
+          useSlotsViewOnSmallScreen: true,
+          theme: "light",
+        },
+      });
+
+      // UI options
+      window.Cal.ns[NAMESPACE]("ui", {
+        theme: "light",
+        cssVarsPerTheme: {
+          light: { "cal-brand": "#f6c92d" },
+          dark: { "cal-brand": "#fdfea2" },
+        },
+        hideEventTypeDetails: false,
+        layout: "month_view",
+      });
     };
 
-    if (window.Calendly) {
-      initCalendly();
-    } else {
-      const checkCalendly = setInterval(() => {
-        if (window.Calendly) {
-          clearInterval(checkCalendly);
-          initCalendly();
+    const loadScriptIfNeeded = () => {
+      // Already loaded
+      if (window.Cal) {
+        initCal();
+        return;
+      }
+
+      // Script tag already exists (maybe loaded elsewhere)
+      const existing = document.querySelector<HTMLScriptElement>(
+        `script[src="${SCRIPT_SRC}"]`
+      );
+
+      if (!existing) {
+        const script = document.createElement("script");
+        script.src = SCRIPT_SRC;
+        script.async = true;
+        script.onload = initCal;
+        document.head.appendChild(script);
+      }
+
+      // Fallback: poll until Cal is available (covers cases where onload doesn't fire as expected)
+      intervalId = window.setInterval(() => {
+        if (window.Cal) {
+          if (intervalId) window.clearInterval(intervalId);
+          intervalId = null;
+          initCal();
         }
       }, 100);
+    };
 
-      return () => clearInterval(checkCalendly);
-    }
+    loadScriptIfNeeded();
+
+    return () => {
+      if (intervalId) window.clearInterval(intervalId);
+      intervalId = null;
+
+      // Clean up the container on unmount
+      if (containerRef.current) containerRef.current.innerHTML = "";
+    };
   }, []);
 
   return (
@@ -57,8 +97,8 @@ export default function BookingWidget() {
       <div
         ref={containerRef}
         className="w-full"
-        style={{ minWidth: '320px', height: '700px' }}
-      ></div>
+        style={{ minWidth: "320px", height: "700px", overflow: "auto" }}
+      />
     </div>
   );
 }

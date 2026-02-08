@@ -8,7 +8,18 @@ export default function FinalCTA() {
 
   return (
     <>
-      <section className="bg-gray-50 py-16 md:py-24">
+      {/* Sticky CTA for mobile */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-gray-200 shadow-lg p-4">
+        <button
+          onClick={handleBookCall}
+          className="w-full bg-[#B89B4F] text-white px-6 py-4 rounded-lg font-semibold text-base hover:bg-[#A68B3F] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
+        >
+          Get My Free Sample Edit
+          <ArrowRight className="w-5 h-5" />
+        </button>
+      </div>
+
+      <section className="bg-gray-50 py-16 md:py-24 pb-32 md:pb-24">
         <div className="max-w-[1100px] mx-auto px-6 md:px-8 flex justify-center">
           <div className="max-w-3xl text-center">
             <h2 className="font-serif text-3xl md:text-5xl text-black leading-tight mb-8">

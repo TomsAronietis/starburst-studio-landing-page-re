@@ -3,7 +3,7 @@ import { CheckCircle, ArrowRight } from 'lucide-react';
 export default function Mechanism() {
   const steps = [
     'You show us the style and what you want your videos to look like.',
-    'Upload your video clips into our system.',
+    'Upload your video clips.',
     'We edit with professional software and review against our quality standards.',
     'You see status updates, and changes without chasing.',
     'Request changes and we fix them within 48 hours.',

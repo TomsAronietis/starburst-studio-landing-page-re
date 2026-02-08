@@ -34,9 +34,9 @@ function App() {
       <ProofStrip />
       <ProofGallery />
       <ProblemSection />
-      <CTASectionWhite />
       <Offer />
       <AudienceFit />
+      <CTASectionWhite />
       <FAQ />
       <FinalCTA />
     </div>

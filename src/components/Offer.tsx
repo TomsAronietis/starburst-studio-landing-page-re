@@ -23,7 +23,9 @@ export default function Offer() {
   const steps = [
     'Let us know how to get in touch with you',
     'Upload your video clips',
-    'Receive your edited sample',
+    'We edit with professional software',
+    'Receive your edited sample'
+    'Request changes and we fix them within 48 hours'
   ];
 
   useEffect(() => {

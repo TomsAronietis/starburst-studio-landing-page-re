@@ -25,7 +25,7 @@ export default function FinalCTA() {
               onClick={handleBookCall}
               className="bg-[#B89B4F] text-white px-8 py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-[#A68B3F] transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl mb-4 mx-auto"
             >
-              Book My Free Sample Edit Call
+              Get My Free Sample Edit
               <ArrowRight className="w-5 h-5" />
             </button>
 

@@ -128,7 +128,7 @@ export default function Offer() {
               onClick={handleBookCall}
               className="bg-white text-[#B89B4F] px-8 py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl w-full"
             >
-              Book My Free Sample Edit Call
+              Get My Free Sample Edit
               <ArrowRight className="w-5 h-5" />
             </button>
 

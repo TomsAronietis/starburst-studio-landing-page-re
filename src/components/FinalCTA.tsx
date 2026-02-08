@@ -76,7 +76,7 @@ export default function FinalCTA({ onOpenPopup }: FinalCTAProps) {
         </div>
       </section>
 
-      <section id="booking-widget" className="bg-white py-16 md:py-24">
+      {/* <section id="booking-widget" className="bg-white py-16 md:py-24">
         <div className="max-w-[1100px] mx-auto px-6 md:px-8">
           <div className="text-center mb-8">
             <h3 className="font-serif text-2xl md:text-3xl text-black mb-2">
@@ -92,7 +92,7 @@ export default function FinalCTA({ onOpenPopup }: FinalCTAProps) {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <footer className="bg-[#B89B4F] py-8">
         <div className="max-w-[1100px] mx-auto px-6 md:px-8 text-center">

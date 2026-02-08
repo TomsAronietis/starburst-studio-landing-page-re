@@ -48,7 +48,7 @@ export default function Hero() {
               onClick={handleBookCall}
               className="bg-[#B89B4F] text-white px-8 py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-[#A68B3F] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
             >
-              Book My Free Sample Edit Call
+              Get My Free Sample Edit
               <ArrowRight className="w-5 h-5" />
             </button>
 
@@ -61,7 +61,7 @@ export default function Hero() {
           </div>
 
           <p className="text-sm md:text-base text-gray-600 italic">
-            Book a quick call → upload your clips → get your free sample edit in 48 hours
+            Let us know how to get in touch → Upload your clips → Get your free sample edit in 48 hours
           </p>
         </div>
       </div>

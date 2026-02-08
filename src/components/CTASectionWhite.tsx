@@ -4,7 +4,7 @@ export default function CTASectionWhite() {
   };
 
   return (
-    <section className="bg-white py-16 md:py-20">
+    <section className="bg-white py-0 md:py-0">
       <div className="max-w-[1100px] mx-auto px-6 md:px-8 flex justify-center">
         <button
           onClick={handleBookCall}

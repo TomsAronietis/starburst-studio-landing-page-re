@@ -7,6 +7,7 @@ import Mechanism from './components/Mechanism';
 import AudienceFit from './components/AudienceFit';
 import Offer from './components/Offer';
 import CTASection from './components/CTASection';
+import CTASectionWhite from './components/CTASectionWhite';
 import FAQ from './components/FAQ';
 import FinalCTA from './components/FinalCTA';
 import AdminVideoUpload from './components/AdminVideoUpload';

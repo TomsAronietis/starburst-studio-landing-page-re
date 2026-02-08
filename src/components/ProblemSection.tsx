@@ -1,4 +1,10 @@
+import { ArrowRight } from 'lucide-react';
+
 export default function ProblemSection() {
+  const handleBookCall = () => {
+    document.getElementById('booking-widget')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <section className="bg-white pt-16 md:pt-24 pb-6 md:pb-8">
       <div className="max-w-[1100px] mx-auto px-6 md:px-8 flex flex-col items-center">
@@ -36,6 +42,16 @@ export default function ProblemSection() {
               <path d="M16 2 Q 20 12 16 22" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
               <path d="M10 18 L16 28 L22 18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
             </svg>
+          </div>
+
+          <div className="mt-10 flex justify-center">
+            <button
+              onClick={handleBookCall}
+              className="bg-[#B89B4F] text-white px-10 py-5 rounded-lg font-semibold text-xl md:text-2xl hover:scale-105 transition-transform duration-300 flex items-center gap-3 shadow-xl"
+            >
+              Get My Free Sample Edit
+              <ArrowRight className="w-6 h-6" />
+            </button>
           </div>
         </div>
       </div>

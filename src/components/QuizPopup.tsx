@@ -78,7 +78,7 @@ export default function QuizPopup({ onClose }: QuizPopupProps) {
             Get Your Free Sample Edit
           </h2>
           <p className="text-white/90 text-sm">
-            See the Starburst Studio difference risk-free
+            Have one of your videos edited for free
           </p>
         </div>
 

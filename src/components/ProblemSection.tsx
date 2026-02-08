@@ -1,10 +1,6 @@
 export default function ProblemSection() {
-  const handleBookCall = () => {
-    document.getElementById('booking-widget')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <section className="bg-white pt-16 md:pt-24 pb-6 md:pb-8">
+    <section className="bg-white pt-16 md:pt-24 pb-16 md:pb-24">
       <div className="max-w-[1100px] mx-auto px-6 md:px-8 flex flex-col items-center">
         <h2 className="font-serif text-3xl md:text-5xl text-black leading-tight mb-8 max-w-3xl text-center">
           You've heard this a thousand times already: <span className="text-[#B89B4F]">social media matters</span>.
@@ -34,22 +30,6 @@ export default function ProblemSection() {
           <p className="text-[#B89B4F] text-base md:text-lg">
             Here's the truth: posting only feels awkward when you approach it the wrong way, with the wrong set up.
           </p>
-
-          <div className="mt-12 flex justify-center">
-            <svg width="32" height="40" viewBox="0 0 32 40" className="text-[#B89B4F]" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 2 Q 20 12 16 22" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-              <path d="M10 18 L16 28 L22 18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-            </svg>
-          </div>
-
-          <div className="mt-10 flex justify-center">
-            <button
-              onClick={handleBookCall}
-              className="bg-[#B89B4F] text-white px-10 py-5 rounded-lg font-semibold text-xl md:text-2xl hover:scale-105 transition-transform duration-300 shadow-xl"
-            >
-              Get My Free Sample Edit
-            </button>
-          </div>
         </div>
       </div>
     </section>

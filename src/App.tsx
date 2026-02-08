@@ -35,7 +35,6 @@ function App() {
       <ProblemSection />
       <CTASectionWhite />
       <Offer />
-      <AudienceFit />
       <FAQ />
       <FinalCTA />
     </div>

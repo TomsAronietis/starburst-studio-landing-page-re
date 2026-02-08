@@ -42,6 +42,30 @@ export default function QuizPopup({ onClose }: QuizPopupProps) {
         return;
       }
 
+      // Split name into first and last name
+      const nameParts = formData.name.trim().split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+
+      // Send webhook to Zapier
+      try {
+        await fetch('https://hooks.zapier.com/hooks/catch/21757852/ue6ipkg/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            first_name: firstName,
+            last_name: lastName,
+            phone_number: formData.phone,
+            email: formData.email,
+          }),
+        });
+      } catch (webhookError) {
+        // Log webhook error but don't block the user experience
+        console.error('Webhook error:', webhookError);
+      }
+
       setStep(4);
     } catch (err) {
       setError('Something went wrong. Please try again.');

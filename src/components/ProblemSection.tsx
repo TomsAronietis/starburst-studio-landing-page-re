@@ -1,5 +1,3 @@
-import { ArrowRight } from 'lucide-react';
-
 export default function ProblemSection() {
   const handleBookCall = () => {
     document.getElementById('booking-widget')?.scrollIntoView({ behavior: 'smooth' });
@@ -47,10 +45,9 @@ export default function ProblemSection() {
           <div className="mt-10 flex justify-center">
             <button
               onClick={handleBookCall}
-              className="bg-[#B89B4F] text-white px-10 py-5 rounded-lg font-semibold text-xl md:text-2xl hover:scale-105 transition-transform duration-300 flex items-center gap-3 shadow-xl"
+              className="bg-[#B89B4F] text-white px-10 py-5 rounded-lg font-semibold text-xl md:text-2xl hover:scale-105 transition-transform duration-300 shadow-xl"
             >
               Get My Free Sample Edit
-              <ArrowRight className="w-6 h-6" />
             </button>
           </div>
         </div>

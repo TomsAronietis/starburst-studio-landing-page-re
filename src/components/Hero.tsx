@@ -1,9 +1,10 @@
 import { ArrowRight } from 'lucide-react';
 
-export default function Hero() {
-  const handleBookCall = () => {
-    document.getElementById('booking-widget')?.scrollIntoView({ behavior: 'smooth' });
-  };
+interface HeroProps {
+  onOpenPopup: () => void;
+}
+
+export default function Hero({ onOpenPopup }: HeroProps) {
 
   const handleWatchExamples = () => {
     document.getElementById('proof-gallery')?.scrollIntoView({ behavior: 'smooth' });
@@ -45,7 +46,7 @@ export default function Hero() {
 
           <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center">
             <button
-              onClick={handleBookCall}
+              onClick={onOpenPopup}
               className="bg-[#B89B4F] text-white px-8 py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-[#A68B3F] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
             >
               Get My Free Sample Edit

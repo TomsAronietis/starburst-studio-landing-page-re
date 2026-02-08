@@ -9,7 +9,11 @@ interface SampleEditVideo {
   video_url: string;
 }
 
-export default function Offer() {
+interface OfferProps {
+  onOpenPopup: () => void;
+}
+
+export default function Offer({ onOpenPopup }: OfferProps) {
   const [videos, setVideos] = useState<SampleEditVideo[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
@@ -47,10 +51,6 @@ export default function Offer() {
     } catch (error) {
       console.error('Error loading sample edit videos:', error);
     }
-  };
-
-  const handleBookCall = () => {
-    document.getElementById('booking-widget')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -127,7 +127,7 @@ export default function Offer() {
             </div>
 
             <button
-              onClick={handleBookCall}
+              onClick={onOpenPopup}
               className="bg-white text-[#B89B4F] px-8 py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-gray-100 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl w-full"
             >
               Get My Free Sample Edit

@@ -2,7 +2,11 @@ import { ArrowRight } from 'lucide-react';
 import BookingWidget from './BookingWidget';
 import { useState, useEffect } from 'react';
 
-export default function FinalCTA() {
+interface FinalCTAProps {
+  onOpenPopup: () => void;
+}
+
+export default function FinalCTA({ onOpenPopup }: FinalCTAProps) {
   const [showStickyCTA, setShowStickyCTA] = useState(false);
 
   useEffect(() => {
@@ -31,16 +35,12 @@ export default function FinalCTA() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleBookCall = () => {
-    document.getElementById('booking-widget')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <>
       {/* Sticky CTA for mobile */}
       <div className={`fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-gray-200 shadow-lg p-4 transition-transform duration-300 ease-in-out ${showStickyCTA ? 'translate-y-0' : 'translate-y-full'}`}>
         <button
-          onClick={handleBookCall}
+          onClick={onOpenPopup}
           className="w-full bg-[#B89B4F] text-white px-6 py-4 rounded-lg font-semibold text-base hover:bg-[#A68B3F] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
         >
           Get My Free Sample Edit
@@ -62,7 +62,7 @@ export default function FinalCTA() {
             </div>
 
             <button
-              onClick={handleBookCall}
+              onClick={onOpenPopup}
               className="bg-[#B89B4F] text-white px-8 py-4 rounded-lg font-semibold text-base md:text-lg hover:bg-[#A68B3F] transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl mb-4 mx-auto"
             >
               Get My Free Sample Edit

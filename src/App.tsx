@@ -55,7 +55,7 @@ function App() {
         localStorage.setItem('hasSeenQuizPopup', 'true');
         window.removeEventListener('scroll', handleScroll);
       }
-    }, 15000);
+    }, 10000);
 
     window.addEventListener('scroll', handleScroll);
 
@@ -73,16 +73,20 @@ function App() {
     setShowPopup(false);
   };
 
+  const handleOpenPopup = () => {
+    setShowPopup(true);
+  };
+
   return (
     <div className="min-h-screen bg-white">
-      <Hero />
+      <Hero onOpenPopup={handleOpenPopup} />
       <ProofStrip />
       <ProofGallery />
-      <Offer />
+      <Offer onOpenPopup={handleOpenPopup} />
       <AudienceFit />
-      <CTASectionWhite />
+      <CTASectionWhite onOpenPopup={handleOpenPopup} />
       <FAQ />
-      <FinalCTA />
+      <FinalCTA onOpenPopup={handleOpenPopup} />
       {showPopup && <QuizPopup onClose={handleClosePopup} />}
     </div>
   );

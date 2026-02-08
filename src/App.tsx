@@ -32,10 +32,10 @@ function App() {
       <Hero />
       <ProofStrip />
       <ProofGallery />
+      <ProblemSection />
+      <CTASectionWhite />
       <Offer />
       <AudienceFit />
-      <ProblemSection />
-      <CTASection />
       <FAQ />
       <FinalCTA />
     </div>

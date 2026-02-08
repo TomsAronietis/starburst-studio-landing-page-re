@@ -15,7 +15,7 @@ const GALLERY_VIDEOS = [
 
 export default function ProofGallery() {
   return (
-    <section id="proof-gallery" className="bg-white py-16 md:py-24">
+    <section id="proof-gallery" className="bg-white py-8 md:py-17">
       <div className="max-w-[1100px] mx-auto px-6 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           {GALLERY_VIDEOS.map((video) => (

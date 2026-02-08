@@ -36,7 +36,7 @@ export default function Hero() {
           </div>
 
           <p className="text-base md:text-2xl text-black leading-relaxed mb-6 max-w-3xl font-light">
-            We'll transform your raw real estate clips into professional videos that attract clients and keep you smiling.
+            We'll turn your raw real estate clips into professional videos that attract clients and keep you smiling.
           </p>
 
           <p className="text-lg md:text-xl text-black mb-8 max-w-2xl font-semibold">

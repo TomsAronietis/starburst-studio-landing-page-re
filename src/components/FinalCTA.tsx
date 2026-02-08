@@ -8,13 +8,26 @@ export default function FinalCTA() {
   useEffect(() => {
     const handleScroll = () => {
       const heroSection = document.querySelector('section');
-      if (heroSection) {
+      const footer = document.querySelector('footer');
+
+      if (heroSection && footer) {
         const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-        setShowStickyCTA(window.scrollY > heroBottom);
+        const scrolledPastHero = window.scrollY > heroBottom;
+
+        // Calculate distance from bottom of viewport to footer
+        const footerTop = footer.offsetTop;
+        const viewportBottom = window.scrollY + window.innerHeight;
+        const distanceToFooter = footerTop - viewportBottom;
+
+        // Hide sticky CTA when within 200px of footer
+        const nearFooter = distanceToFooter < 200;
+
+        setShowStickyCTA(scrolledPastHero && !nearFooter);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check on mount
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

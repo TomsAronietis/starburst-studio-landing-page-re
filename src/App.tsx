@@ -33,7 +33,6 @@ function App() {
       <Hero />
       <ProofStrip />
       <ProofGallery />
-      <ProblemSection />
       <Offer />
       <AudienceFit />
       <CTASectionWhite />

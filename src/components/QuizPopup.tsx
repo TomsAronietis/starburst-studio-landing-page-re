@@ -116,9 +116,13 @@ export default function QuizPopup({ onClose }: QuizPopupProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">You're all set!</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Thanks! We've received your submission!</h3>
               <p className="text-gray-600 mb-6">
-                We'll be in touch within 24 hours to discuss your free sample edit.
+                Want to skip the line? To get priority status for your free video edit sample, send us a quick email right now from the same address you used on this form.<br></br>
+<br></br>To: starburstcraftstudio@gmail.com
+<br></br>Subject Line: STARBURST
+<br></br>Email Body: STARBURST
+<br></br>Sending this moves you to the top of our queue!
               </p>
               <button
                 onClick={onClose}

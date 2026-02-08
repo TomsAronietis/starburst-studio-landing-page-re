@@ -34,7 +34,6 @@ function App() {
       <Offer />
       <AudienceFit />
       <ProblemSection />
-      <Mechanism />
       <FAQ />
       <FinalCTA />
     </div>

@@ -63,7 +63,7 @@ export default function QuizPopup({ onClose }: QuizPopupProps) {
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full relative overflow-hidden">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute top-4 right-4 z-10 text-white hover:text-gray-100 transition-colors"
           aria-label="Close"
         >
           <X className="w-6 h-6" />

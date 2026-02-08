@@ -1,7 +1,23 @@
 import { ArrowRight } from 'lucide-react';
 import BookingWidget from './BookingWidget';
+import { useState, useEffect } from 'react';
 
 export default function FinalCTA() {
+  const [showStickyCTA, setShowStickyCTA] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroSection = document.querySelector('section');
+      if (heroSection) {
+        const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+        setShowStickyCTA(window.scrollY > heroBottom);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleBookCall = () => {
     document.getElementById('booking-widget')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -9,7 +25,7 @@ export default function FinalCTA() {
   return (
     <>
       {/* Sticky CTA for mobile */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-gray-200 shadow-lg p-4">
+      <div className={`fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-gray-200 shadow-lg p-4 transition-transform duration-300 ease-in-out ${showStickyCTA ? 'translate-y-0' : 'translate-y-full'}`}>
         <button
           onClick={handleBookCall}
           className="w-full bg-[#B89B4F] text-white px-6 py-4 rounded-lg font-semibold text-base hover:bg-[#A68B3F] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"

@@ -47,11 +47,13 @@ export default function QuizPopup({ onClose }: QuizPopupProps) {
       const firstName = nameParts[0] || '';
       const lastName = nameParts.slice(1).join(' ') || '';
 
-      // Send webhook to Zapier
+      // Send webhook to Zapier via edge function
       try {
-        await fetch('https://hooks.zapier.com/hooks/catch/21757852/ue6ipkg/', {
+        const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-lead-webhook`;
+        await fetch(apiUrl, {
           method: 'POST',
           headers: {
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({

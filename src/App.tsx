@@ -32,9 +32,9 @@ function App() {
       <ProofStrip />
       <ProofGallery />
       <Offer />
+      <AudienceFit />
       <ProblemSection />
       <Mechanism />
-      <AudienceFit />
       <FAQ />
       <FinalCTA />
     </div>

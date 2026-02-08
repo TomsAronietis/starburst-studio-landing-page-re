@@ -21,7 +21,7 @@ export default function Offer() {
   ];
 
   const steps = [
-    'Book a quick call',
+    'Let us know how to get in touch with you',
     'Send 1 clip',
     'Receive your edited sample',
   ];

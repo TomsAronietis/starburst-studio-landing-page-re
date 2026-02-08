@@ -24,7 +24,7 @@ export default function Offer() {
     'Let us know how to get in touch with you',
     'Upload your video clips',
     'We edit with professional software',
-    'Receive your edited sample'
+    'Receive your edited sample',
     'Request changes and we fix them within 48 hours'
   ];
 

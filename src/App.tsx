@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import Hero from './components/Hero';
 import ProofStrip from './components/ProofStrip';
 import ProofGallery from './components/ProofGallery';

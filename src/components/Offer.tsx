@@ -22,7 +22,7 @@ export default function Offer() {
 
   const steps = [
     'Let us know how to get in touch with you',
-    'Send 1 clip',
+    'Upload your video clips',
     'Receive your edited sample',
   ];
 

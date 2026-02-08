@@ -31,10 +31,10 @@ function App() {
       <Hero />
       <ProofStrip />
       <ProofGallery />
+      <Offer />
       <ProblemSection />
       <Mechanism />
       <AudienceFit />
-      <Offer />
       <FAQ />
       <FinalCTA />
     </div>

@@ -30,6 +30,13 @@ export default function ProblemSection() {
           <p className="text-[#B89B4F] text-base md:text-lg">
             Here's the truth: posting only feels awkward when you approach it the wrong way, with the wrong set up.
           </p>
+
+          <div className="mt-12 flex justify-center">
+            <svg width="32" height="40" viewBox="0 0 32 40" className="text-[#B89B4F]" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 2 Q 20 12 16 22" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
+              <path d="M10 18 L16 28 L22 18" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            </svg>
+          </div>
         </div>
       </div>
     </section>

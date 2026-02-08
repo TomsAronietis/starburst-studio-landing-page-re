@@ -33,7 +33,6 @@ function App() {
       <ProofGallery />
       <Offer />
       <AudienceFit />
-      <ProblemSection />
       <FAQ />
       <FinalCTA />
     </div>
